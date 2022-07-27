@@ -1,0 +1,14 @@
+SIGN UP (name, username and password)
+
+-food categories: rice & noodles, bread & cakes & pastry, snacks, fresh produce, condiments, canned food, beverage, chilled and frozen food 
+-post a listing (user must input name, image, expiry date, category, pick up location, pick up times)
+-listing has three statuses (available, reserved, gone)
+-filter listings by expiry status (expired, not expired) and type of food
+-sort listings by location (location is defaulted to location on sign up, though understand meet up may not be there) and newest listings
+-interested user can initiate chat with lister for pick up
+-post lister can edit post to change its status
+
+
+extra:
+rate transaction ala carousell
+view listings in a map instead of just list 
