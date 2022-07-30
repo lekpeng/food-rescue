@@ -1,0 +1,11 @@
+const controller = {
+  showLoginForm: (req, res) => {
+    res.render("pages/login");
+  },
+
+  showSignupForm: (req, res) => {
+    res.reder("pages/signup");
+  },
+};
+
+module.exports = controller;

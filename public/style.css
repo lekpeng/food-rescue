@@ -1,0 +1,17 @@
+.constrained-full-height {
+  min-height: calc(100vh - 84px);
+}
+
+footer p {
+  margin: 0;
+  text-align: center;
+  padding: 15px 0;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+#login-form {
+  margin: 20vw;
+}
