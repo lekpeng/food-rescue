@@ -1,10 +1,52 @@
+const bcrypt = require("bcrypt");
+const userModel = require("../../models/users/users");
+const userValidators = require("../validators/users");
+
 const controller = {
   showLoginForm: (req, res) => {
+    console.log("----->Show login form<-----");
     res.render("pages/login");
   },
 
   showSignupForm: (req, res) => {
-    res.reder("pages/signup");
+    console.log("----->Show sign up form-----");
+    res.render("pages/signup", { errorMsg: false });
+  },
+
+  signup: async (req, res) => {
+    console.log("------->Sign up<---- ---");
+    let errorMsg = false;
+    const validationResults = userValidators.signupValidator.validate(req.body);
+    if (validationResults.error) {
+      const rawMessage = validationResults.error.details[0].message
+      //.replace("_"," ")
+      errorMsg = rawMessage.charAt(0) + rawMessage.charAt(1).toUpperCase() + rawMessage.slice(2)
+      if (errorMsg.includes("[ref:password]")){
+        errorMsg = "The two passwords did not match"
+      } 
+      
+      res.render("pages/signup", { errorMsg });
+      return;
+    }
+
+    const validatedResults = validationResults.value;
+
+    // hash the password
+    const hash = await bcrypt.hash(validatedResults.password, 10);
+
+    // create the user and store in db
+    try {
+      await userModel.create({
+        username: validatedResults.username,
+        email: validatedResults.email,
+        hash: hash,
+      });
+    } catch (err) {
+      console.log("err in creating user", err);
+      res.send("failed to create user");
+    }
+
+    res.redirect("/users/login");
   },
 };
 

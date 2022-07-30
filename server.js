@@ -40,14 +40,14 @@ app.get("/", (req, res) => {
 app.get("/login", userController.showLoginForm);
 // app.post("/login", userController.login);
 app.get("/signup", userController.showSignupForm);
+app.post("/signup", userController.signup);
 
 app.listen(port, async () => {
   try {
-    await mongoose.connect(mongoConnStr, { dbName: "biscoff_bakery" });
+    await mongoose.connect(mongoConnStr, { dbName: "food_rescue" });
   } catch (err) {
     console.log(`Failed to connect to DB`);
     process.exit(1);
   }
-
   console.log(`Food Rescue listening on port ${port}`);
 });

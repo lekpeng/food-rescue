@@ -1,5 +1,9 @@
 .constrained-full-height {
-  min-height: calc(100vh - 84px);
+  min-height: calc(100vh - 54px);
+}
+
+footer {
+  background-color: lightgray;
 }
 
 footer p {
@@ -12,6 +16,7 @@ footer p {
   justify-content: center;
 }
 
-#login-form {
-  margin: 20vw;
+#login-form,
+#signup-form {
+  margin: 25vw;
 }
