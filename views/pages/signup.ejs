@@ -12,8 +12,8 @@
 
         <form id="signup-form" class="mt-5" method="POST" action="/signup">
           <div class="error-msgs">
-            <%if (errorMsg){%> 
-              <p><%=errorMsg%>. Please try again.</p> 
+            <%if (errorMsg){%>
+            <p><%=errorMsg%>. Please try again.</p>
             <%}%>
           </div>
 
@@ -42,15 +42,37 @@
             />
           </div>
 
+          <div class="mb-3 justify-center" style="display:none">
+            <label for="location" class="form-label ps-0">Location</label>
+            <input type="text" class="form-control location-input" id="location" name="location" />
+          </div>
+
+          <div class="mb-3 justify-center">
+            <p>We use your location to show you listings that are available nearby</p>
+            <input
+              type="button"
+              class="btn btn-primary"
+              value="Find current location"
+              onClick="getLocationLeaflet()"
+            />
+          </div>
+
+          <div class="mb-3 text-center" id="map"></div>
+
           <div class="success-msg"></div>
 
           <div class="mb-3 text-center">
-            <button type="submit" class="btn btn-primary">Sign up</button>
+            <input type="submit" value = "Sign up" class="btn btn-primary"></input>
           </div>
         </form>
       </div>
     </div>
-
     <%- include('../partials/footer'); %>
+    <script
+      src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+      integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+      crossorigin=""
+    ></script>
+    <script src="/scripts/map.js"></script>
   </body>
 </html>

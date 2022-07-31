@@ -15,6 +15,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
+  location: {
+    type: String,
+    required: true,
+  },
 });
 
 const User = mongoose.model("User", userSchema); //User is converted to users as the collection name

@@ -2,6 +2,10 @@
   min-height: calc(100vh - 54px);
 }
 
+#map {
+  height: 180px;
+}
+
 footer {
   background-color: lightgray;
 }
