@@ -26,5 +26,16 @@
     "joi": "^17.6.0",
     "method-override": "^3.0.0",
     "mongoose": "^6.5.0"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "*.*"
+    ],
+    "ignore": [
+      "node_modules"
+    ],
+    "ext": "js json ejs",
+    "legacyWatch": true,
+    "exec": "node server.js"
   }
 }

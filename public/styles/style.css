@@ -20,3 +20,7 @@ footer p {
 #signup-form {
   margin: 25vw;
 }
+
+.error-msgs {
+  color: rgb(172, 0, 0);
+}

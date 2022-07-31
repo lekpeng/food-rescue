@@ -13,8 +13,7 @@
         <form id="signup-form" class="mt-5" method="POST" action="/signup">
           <div class="error-msgs">
             <%if (errorMsg){%> 
-              <h5>Please try again</h5>
-              <p><%=errorMsg%></p> 
+              <p><%=errorMsg%>. Please try again.</p> 
             <%}%>
           </div>
 

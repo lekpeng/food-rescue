@@ -4,8 +4,74 @@ const userValidators = require("../validators/users");
 
 const controller = {
   showLoginForm: (req, res) => {
-    console.log("----->Show login form<-----");
-    res.render("pages/login");
+    console.log("----->Show login formsss<-----");
+    res.render("pages/login", { errorMsg: false });
+  },
+
+  login: async (req, res) => {
+    console.log("------->Log inner<-------");
+
+    // validation
+    let errorMsg = false;
+    const validationResults = userValidators.loginValidator.validate(req.body);
+
+    if (validationResults.error) {
+      const rawMessage = validationResults.error.details[0].message;
+      errorMsg = rawMessage.charAt(0) + rawMessage.charAt(1).toUpperCase() + rawMessage.slice(2);
+      res.render("pages/login", { errorMsg });
+      return;
+    }
+
+    const validatedResults = validationResults.value;
+
+    let user = null;
+
+    // get user with email from DB
+    try {
+      user = await userModel.findOne({ username: validatedResults.username });
+    } catch (err) {
+      res.render("pages/login", { errorMsg: "Something went wrong. Please try again." });
+      return;
+    }
+
+    // Username not in database
+
+    if (!user) {
+      res.render("pages/login", {
+        errorMsg: "Username not found. Please sign up if you do not have an existing account.",
+      });
+      return;
+    }
+
+    // use bcrypt to compare the given password with the one store as has in DB
+    const pwMatches = await bcrypt.compare(validatedResults.password, user.hash);
+
+    if (!pwMatches) {
+      res.render("pages/login", { errorMsg: "Incorrect password. Please try again." });
+      return;
+    }
+
+    // log the user in by creating a session
+    req.session.regenerate(function (err) {
+      if (err) {
+        res.render("pages/login", { errorMsg: "Something went wrong. Please try again." });
+        return;
+      }
+
+      // store user information in session, typically a user id
+      req.session.user = user.username;
+
+      // save the session before redirection to ensure page
+      // load does not happen before session is saved
+      req.session.save(function (err) {
+        if (err) {
+          res.render("pages/login", { errorMsg: "Something went wrong. Please try again." });
+          return;
+        }
+        res.send("login success");
+        // res.redirect("/users/profile");
+      });
+    });
   },
 
   showSignupForm: (req, res) => {
@@ -15,16 +81,17 @@ const controller = {
 
   signup: async (req, res) => {
     console.log("------->Sign up<---- ---");
+
+    // validation
     let errorMsg = false;
     const validationResults = userValidators.signupValidator.validate(req.body);
     if (validationResults.error) {
-      const rawMessage = validationResults.error.details[0].message
-      //.replace("_"," ")
-      errorMsg = rawMessage.charAt(0) + rawMessage.charAt(1).toUpperCase() + rawMessage.slice(2)
-      if (errorMsg.includes("[ref:password]")){
-        errorMsg = "The two passwords did not match"
-      } 
-      
+      const rawMessage = validationResults.error.details[0].message;
+      errorMsg = rawMessage.charAt(0) + rawMessage.charAt(1).toUpperCase() + rawMessage.slice(2);
+      if (errorMsg.includes("[ref:password]")) {
+        errorMsg = "The two passwords did not match";
+      }
+
       res.render("pages/signup", { errorMsg });
       return;
     }
@@ -42,11 +109,11 @@ const controller = {
         hash: hash,
       });
     } catch (err) {
-      console.log("err in creating user", err);
-      res.send("failed to create user");
+      errorMsg = "Something went wronggg.";
+      res.render("pages/signup", { errorMsg });
     }
 
-    res.redirect("/users/login");
+    res.redirect("/login");
   },
 };
 

@@ -1,0 +1,2 @@
+const listingModel = require("../../models/listings/listings");
+const listingValidators = require("../validators/listings");

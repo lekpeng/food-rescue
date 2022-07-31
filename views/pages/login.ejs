@@ -10,14 +10,18 @@
         </div>
 
         <form id="login-form" class="mt-5" method="POST" action="/login">
-          <ul class="error-msgs"></ul>
+          <div class="error-msgs">
+            <%if (errorMsg){%>
+            <p><%=errorMsg%></p>
+            <%}%>
+          </div>
 
-          <div class="row mb-3 justify-center">
+          <div class="mb-3 justify-center">
             <label for="username" class="form-label ps-0">Username</label>
             <input type="text" class="form-control" id="username" name="username" />
           </div>
 
-          <div class="row mb-3 justify-center">
+          <div class="mb-3 justify-center">
             <label for="password" class="form-label ps-0">Password</label>
             <input type="password" class="form-control" id="password" name="password" />
           </div>

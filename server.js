@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
+const authMiddleware = require("./middlewares/auth_middleware");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -26,21 +27,25 @@ app.use(
 //ROUTES
 
 //Main
-app.get("/", (req, res) => {
-  // if logged in redirect to /listings
-  if (req.session.currentUser) {
-    res.redirect("/listings");
-  } else {
-    // else redirect to /login
-    res.redirect("/login");
-  }
+app.get("/", authMiddleware.isAuthenticated, (req, res) => {
+  res.redirect("/listings");
 });
+// app.get("/", (req, res) => {
+//   if (req.session.user) {
+//     res.redirect("/listings");
+//   } else {
+//     res.redirect("/login");
+//   }
+// });
 
 //Login and Signup
 app.get("/login", userController.showLoginForm);
-// app.post("/login", userController.login);
+app.post("/login", userController.login);
 app.get("/signup", userController.showSignupForm);
 app.post("/signup", userController.signup);
+
+//Listings
+// app.get("/listings", authMiddleware.isAuthenticated, listingController.index);
 
 app.listen(port, async () => {
   try {
