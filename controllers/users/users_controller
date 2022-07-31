@@ -90,7 +90,7 @@ const controller = {
       const rawMessage = validationResults.error.details[0].message;
       errorMsg = rawMessage.charAt(0) + rawMessage.charAt(1).toUpperCase() + rawMessage.slice(2);
       if (errorMsg.includes("[ref:password]")) {
-        errorMsg = "The two passwords did not match";
+        errorMsg = "The two passwords did not match. Please try again.";
       }
 
       res.render("pages/signup", { errorMsg });
@@ -111,7 +111,8 @@ const controller = {
         location: validatedResults.location,
       });
     } catch (err) {
-      errorMsg = "Something went wronggg.";
+      errorMsg =
+        "Either the username or email address has been used before. Please use a different username/email address or login if you have an existing account with us.";
       res.render("pages/signup", { errorMsg });
       return;
     }
