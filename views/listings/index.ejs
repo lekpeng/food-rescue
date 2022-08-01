@@ -7,8 +7,51 @@
     <div class="constrained-full-height" id="page-index-listings">
       <div class="container">
         <h1>All Listings</h1>
+        <form method="GET" action="/listings">
+          <div class="sorts">
+            <p>Sort by:</p>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input mr-3" type="radio" name="sort" id="latest" checked />
+              <label class="form-check-label" for="latest"> Latest</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="sort" id="nearest" />
+              <label class="form-check-label" for="nearest"> Nearest </label>
+            </div>
+          </div>
+          <div class="categories">
+            <p>Categories:</p>
+            <!-- other categories:  snacks, fresh produce, condiments, canned food, beverage, chilled and frozen food  -->
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                name="rice-and-noodles"
+                id="rice-and-noodles"
+                checked
+              />
+              <label class="form-check-label" for="rice-and-noodles">Rice and Noodles</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                name="bread-and-pastry"
+                id="bread-and-pastry"
+                checked
+              />
+              <label class="form-check-label" for="bread-and-pastry">Bread and Pastry</label>
+            </div>
+          </div>
+
+          <input class="btn btn-primary" type="submit" value="Apply" />
+        </form>
+        <main class="listings">
+          <!-- filter and display listings here -->
+        </main>
       </div>
     </div>
     <%- include('../partials/footer'); %>
+    <script src="/scripts/filters.js"></script>
   </body>
 </html>

@@ -42,9 +42,11 @@ app.post("/signup", userController.signup);
 app.delete("/logout", userController.logout);
 
 //Listings
-app.get("/listings", listingController.index);
-// to use: after testing done
 // app.get("/listings", authMiddleware.isAuthenticated, listingController.index);
+app.get("/listings", listingController.index);
+app.get("/listings/new", listingController.showNewListingForm);
+// app.post("/listings", listingController.createListing);
+// to use: after testing done
 
 app.listen(port, async () => {
   try {

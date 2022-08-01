@@ -3,8 +3,18 @@ const listingValidators = require("../validators/listings");
 
 const controller = {
   index: (req, res) => {
+    const userQuery = req.query;
+    console.log("userQuery", userQuery);
+
+    // filter and sort according to user query. default is latest, all cats.
+
     res.render("listings/index");
   },
+  showNewListingForm: (req, res) => {
+    res.render("listings/new", { errorMsg: false });
+  },
+
+  createListing: (req, res) => {},
 };
 
 module.exports = controller;

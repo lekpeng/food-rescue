@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/header'); %>
+  <body>
+    <%- include('../partials/nav'); %>
+
+    <div class="constrained-full-height" id="page-index-listings">
+      <div class="container">
+        <h1>Create a new listing</h1>
+        <form method="POST" action="/listings/">
+          <div class="error-msgs">
+            <%if (errorMsg){%>
+            <p><%=errorMsg%></p>
+            <%}%>
+          </div>
+
+          <!-- prompt user to upload image -->
+          <!-- prompt user about pickup location -->
+          <div class="mb-3 justify-center">
+            <label for="listing-name" class="form-label ps-0">Listing name</label>
+            <input type="text" class="form-control" id="listing-name" name="listing-name" />
+          </div>
+
+          <div class="mb-3 justify-center">
+            <label for="description" class="form-label ps-0">Description (optional)</label>
+            <textarea class="form-control" id="description" rows="3"></textarea>
+            <!-- <input type="text" class="form-control" id="description" name="description" /> -->
+          </div>
+
+          <div class="mb-3 justify-center">
+            <label for="pick-up-days-and-times" class="form-label ps-0"
+              >Pick up days and times</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="pick-up-days-and-times"
+              name="pick-up-days-and-times"
+            />
+          </div>
+
+          <div class="mb-3 justify-center">
+            <label for="category" class="form-label ps-0">Category</label>
+            <input
+              type="text"
+              class="form-control"
+              list="categoryOptions"
+              id="category"
+              name="category"
+            />
+            <datalist id="categoryOptions">
+              <option value="Rice and Noodles"></option>
+              <option value="Bread and Pastry"></option>
+            </datalist>
+          </div>
+
+          <div class="mb-3 justify-center">
+            <label for="expiry-date" class="form-label ps-0">Expiry Date</label>
+            <input
+              type="date"
+              value="<%=new Date().toISOString().slice(0, 10)%>"
+              class="form-control"
+              id="expiry-date"
+              name="expiry-date"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+    <%- include('../partials/footer'); %>
+  </body>
+</html>
