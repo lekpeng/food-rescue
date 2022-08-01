@@ -1,2 +1,10 @@
 const listingModel = require("../../models/listings/listings");
 const listingValidators = require("../validators/listings");
+
+const controller = {
+  index: (req, res) => {
+    res.render("listings/index");
+  },
+};
+
+module.exports = controller;

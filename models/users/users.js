@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
   },
 
   location: {
-    type: String,
+    type: [Number],
     required: true,
   },
 });

@@ -3,7 +3,7 @@
 }
 
 #map {
-  height: 500px;
+  height: 50vh;
 }
 
 footer {
@@ -22,9 +22,17 @@ footer p {
 
 #login-form,
 #signup-form {
-  margin: 25vw;
+  margin: 20vw;
 }
 
 .error-msgs {
   color: rgb(172, 0, 0);
+}
+
+#nav-bar {
+  padding: 30px 0;
+}
+
+#nav-bar figure {
+  margin: 0;
 }

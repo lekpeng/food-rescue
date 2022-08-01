@@ -4,16 +4,19 @@ const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const authMiddleware = require("./middlewares/auth_middleware");
+const methodOverride = require("method-override");
 
 const app = express();
 const port = process.env.PORT || 3000;
 const mongoConnStr = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@generalassembly.z7wb6bg.mongodb.net/?retryWrites=true&w=majority`;
 
 const userController = require("./controllers/users/users_controller");
+const listingController = require("./controllers/listings/listings_controller");
 
 //MIDDLEWARE
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
 app.use(express.static("public"));
 app.use(
   session({
@@ -30,21 +33,17 @@ app.use(
 app.get("/", authMiddleware.isAuthenticated, (req, res) => {
   res.redirect("/listings");
 });
-// app.get("/", (req, res) => {
-//   if (req.session.user) {
-//     res.redirect("/listings");
-//   } else {
-//     res.redirect("/login");
-//   }
-// });
 
-//Login and Signup
+//Login/Logout and Signup
 app.get("/login", userController.showLoginForm);
 app.post("/login", userController.login);
 app.get("/signup", userController.showSignupForm);
 app.post("/signup", userController.signup);
+app.delete("/logout", userController.logout);
 
 //Listings
+app.get("/listings", listingController.index);
+// to use: after testing done
 // app.get("/listings", authMiddleware.isAuthenticated, listingController.index);
 
 app.listen(port, async () => {

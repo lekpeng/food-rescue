@@ -4,12 +4,12 @@ const userValidators = require("../validators/users");
 
 const controller = {
   showLoginForm: (req, res) => {
-    console.log("----->Show login formsss<-----");
+    console.log("----->Show login forms<-----");
     res.render("pages/login", { errorMsg: false });
   },
 
   login: async (req, res) => {
-    console.log("------->Log inner<-------");
+    console.log("------->Log in<-------");
 
     // validation
     let errorMsg = false;
@@ -68,9 +68,16 @@ const controller = {
           res.render("pages/login", { errorMsg: "Something went wrong. Please try again." });
           return;
         }
-        res.send("login success");
-        // res.redirect("/users/profile");
+
+        res.redirect("/listings");
       });
+    });
+  },
+
+  logout: (req, res) => {
+    console.log("------->Log out<-------");
+    req.session.destroy(() => {
+      res.redirect("/login");
     });
   },
 
@@ -102,13 +109,17 @@ const controller = {
     // hash the password
     const hash = await bcrypt.hash(validatedResults.password, 10);
 
+    // get location in right form
+    const rawLocation = validatedResults.location.split(/[\s,()]+/);
+    const location = [Number(rawLocation[1]), Number(rawLocation[2])];
+
     // create the user and store in db
     try {
       await userModel.create({
         username: validatedResults.username,
         email: validatedResults.email,
         hash: hash,
-        location: validatedResults.location,
+        location: location,
       });
     } catch (err) {
       errorMsg =
