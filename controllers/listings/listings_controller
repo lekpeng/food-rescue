@@ -3,6 +3,7 @@ const listingValidators = require("../validators/listings");
 
 const controller = {
   index: (req, res) => {
+    console.log("------->Indexing listings<--------");
     const userQuery = req.query;
     console.log("userQuery", userQuery);
 
@@ -10,15 +11,35 @@ const controller = {
 
     res.render("listings/index");
   },
+
   showNewListingForm: (req, res) => {
+    console.log("------->Show New Listing Form<--------");
     res.render("listings/new", { errorMsg: false });
   },
 
   createListing: (req, res) => {
-    console.log("----->req.body", req.body);
-    console.log("----->req.file", req.file);
+    console.log("------->Create New Listing<--------");
+    console.log("req.body", req.body);
+    console.log("req.file", req.file);
 
-    // res.send("listing created");
+    // validation
+    let errorMsg = false;
+    const validationResults = listingValidators.createListingValidator.validate(req.body);
+
+    if (validationResults.error) {
+      const rawMessage = validationResults.error.details[0].message;
+      console.log("raw message", rawMessage);
+      res.send("something went wrong");
+      return;
+    }
+
+    // upload in wrong format
+    if (req.fileValidationError) {
+      res.send("wrong upload format");
+      return;
+    }
+
+    res.send("upload success");
   },
 };
 

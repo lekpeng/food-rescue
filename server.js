@@ -29,7 +29,21 @@ const storage = new CloudinaryStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype === "image/png" || file.mimetype === "image/jpeg") {
+      cb(null, true);
+    } else {
+      cb(null, false);
+      req.fileValidationError =
+        "Invalid upload: Image should be in .png or .jpg format. Please try again";
+      // return cb(
+      //   new Error("Invalid upload: Image should be in .png or .jpg format. Please try again")
+      // );
+    }
+  },
+});
 
 //MIDDLEWARE
 app.set("view engine", "ejs");
@@ -63,7 +77,7 @@ app.delete("/logout", userController.logout);
 // app.get("/listings", authMiddleware.isAuthenticated, listingController.index);
 app.get("/listings", listingController.index);
 app.get("/listings/new", listingController.showNewListingForm);
-app.post("/listings", upload.single("listing-image"), listingController.createListing);
+app.post("/listings", upload.single("listing_image"), listingController.createListing);
 // to use: after testing done
 
 app.listen(port, async () => {

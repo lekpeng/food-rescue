@@ -91,7 +91,6 @@ const controller = {
 
     // validation
     let errorMsg = false;
-    console.log("-------->req body<---------", req.body);
     const validationResults = userValidators.signupValidator.validate(req.body);
     if (validationResults.error) {
       const rawMessage = validationResults.error.details[0].message;
