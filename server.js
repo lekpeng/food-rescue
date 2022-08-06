@@ -5,8 +5,19 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const authMiddleware = require("./middlewares/auth_middleware");
 const methodOverride = require("method-override");
+const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
 
 const app = express();
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./uploads");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+const upload = multer({ storage: storage });
 const port = process.env.PORT || 3000;
 const mongoConnStr = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@generalassembly.z7wb6bg.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -45,7 +56,7 @@ app.delete("/logout", userController.logout);
 // app.get("/listings", authMiddleware.isAuthenticated, listingController.index);
 app.get("/listings", listingController.index);
 app.get("/listings/new", listingController.showNewListingForm);
-// app.post("/listings", listingController.createListing);
+app.post("/listings", upload.single("listing-image"), listingController.createListing);
 // to use: after testing done
 
 app.listen(port, async () => {

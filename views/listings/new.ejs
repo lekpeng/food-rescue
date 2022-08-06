@@ -4,10 +4,10 @@
   <body>
     <%- include('../partials/nav'); %>
 
-    <div class="constrained-full-height" id="page-index-listings">
+    <div class="constrained-full-height" id="page-new-listings">
       <div class="container">
         <h1>Create a new listing</h1>
-        <form method="POST" action="/listings/">
+        <form method="POST" action="/listings/" enctype="multipart/form-data">
           <div class="error-msgs">
             <%if (errorMsg){%>
             <p><%=errorMsg%></p>
@@ -15,6 +15,17 @@
           </div>
 
           <!-- prompt user to upload image -->
+          <div class="mb-3 justify-center">
+            <label for="listing-image" class="form-label ps-0">Upload Listing Image</label>
+            <input
+              type="file"
+              class="form-control"
+              id="listing-image"
+              name="listing-image"
+              accept="image/*"
+            />
+          </div>
+
           <!-- prompt user about pickup location -->
           <div class="mb-3 justify-center">
             <label for="listing-name" class="form-label ps-0">Listing name</label>
@@ -63,6 +74,9 @@
               id="expiry-date"
               name="expiry-date"
             />
+          </div>
+          <div class="mb-3 text-center">
+            <input type="submit" value="Upload Listing" class="btn btn-primary" /><br /><br />
           </div>
         </form>
       </div>
