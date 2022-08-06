@@ -1,28 +1,35 @@
 require("dotenv").config();
 
+const userController = require("./controllers/users/users_controller");
+const listingController = require("./controllers/listings/listings_controller");
+
 const express = require("express");
 const mongoose = require("mongoose");
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const multer = require("multer");
 const session = require("express-session");
 const authMiddleware = require("./middlewares/auth_middleware");
 const methodOverride = require("method-override");
-const multer = require("multer");
-const cloudinary = require("cloudinary").v2;
 
 const app = express();
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./uploads");
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
-});
-const upload = multer({ storage: storage });
 const port = process.env.PORT || 3000;
 const mongoConnStr = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@generalassembly.z7wb6bg.mongodb.net/?retryWrites=true&w=majority`;
 
-const userController = require("./controllers/users/users_controller");
-const listingController = require("./controllers/listings/listings_controller");
+cloudinary.config({
+  cloud_name: `${process.env.CLOUDINARY_CLOUD_NAME}`,
+  api_key: `${process.env.CLOUDINARY_API_KEY}`,
+  api_secret: `${process.env.CLOUDINARY_API_SECRET}`,
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "DEV",
+  },
+});
+
+const upload = multer({ storage: storage });
 
 //MIDDLEWARE
 app.set("view engine", "ejs");

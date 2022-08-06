@@ -15,8 +15,10 @@ const controller = {
   },
 
   createListing: (req, res) => {
-    console.log("req.file", req.file);
-    res.send("listing created");
+    console.log("----->req.body", req.body);
+    console.log("----->req.file", req.file);
+
+    // res.send("listing created");
   },
 };
 
