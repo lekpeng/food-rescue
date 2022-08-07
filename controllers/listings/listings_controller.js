@@ -4,19 +4,34 @@ const listingValidators = require("../validators/listings");
 const mongoose = require("mongoose");
 
 const controller = {
-  index: (req, res) => {
+  index: async (req, res) => {
     console.log("------->Indexing listings<--------");
     const userQuery = req.query;
+
     console.log("userQuery", userQuery);
 
-    // filter and sort according to user query. default is latest, all cats.
+    // filter and sort according to user query. default is latest, all categories.
+    // show only those avail
+    // format expiry date
+    // get distance away from user POV and display accordingly
 
-    res.render("listings/index");
+    try {
+      const listings = await listingModel.find({ status: "available" }).exec();
+
+      res.render("listings/index", { listings });
+    } catch (err) {
+      console.log("Err displaying listings", err);
+    }
   },
 
   showNewListingForm: (req, res) => {
     console.log("------->Show New Listing Form<--------");
-    res.render("listings/new", { errorMsg: false });
+    const dateObj = new Date();
+    const year = dateObj.getFullYear().toString();
+    const month = ("0" + dateObj.getDate()).slice(-2);
+    const day = ("0" + (dateObj.getMonth() + 1)).slice(-2);
+    const todayDate = `${year}-${month}-${day}`;
+    res.render("listings/new", { todayDate, errorMsg: false });
   },
 
   createListing: async (req, res) => {

@@ -48,6 +48,14 @@
         </form>
         <main class="listings">
           <!-- filter and display listings here -->
+          <%listings.forEach(listing => {%>
+          <div class="mb-5 listing">
+            <h4><%=listing.listing_name%></h4>
+            <p>EXP Date: <%=listing.expiry_date.toDateString() %></p>
+            <p>Pick Up: <%=listing.pick_up_days_and_times%></p>
+          </div>
+
+          <%})%>
         </main>
       </div>
     </div>

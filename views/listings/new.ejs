@@ -13,12 +13,7 @@
           <!-- prompt user to upload image -->
           <div class="mb-3 justify-center">
             <label for="listing_image" class="form-label ps-0">Upload Listing Image</label>
-            <input
-              type="file"
-              class="form-control"
-              id="listing_image"
-              name="listing_image"
-            />
+            <input type="file" class="form-control" id="listing_image" name="listing_image" />
           </div>
 
           <!-- prompt user about pickup location (set it to be sign up location for now) -->
@@ -80,7 +75,7 @@
             <label for="expiry_date" class="form-label ps-0">Expiry Date</label>
             <input
               type="date"
-              value="<%=new Date().toISOString().slice(0, 10)%>"
+              value="<%=todayDate%>"
               class="form-control"
               id="expiry_date"
               name="expiry_date"

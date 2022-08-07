@@ -1,7 +1,6 @@
 module.exports = {
   isAuthenticated: (req, res, next) => {
     if (!req.session.currentUser) {
-      console.log("shouldn't run");
       res.redirect("/login");
       return;
     }
