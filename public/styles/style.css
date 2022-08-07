@@ -36,3 +36,16 @@ footer p {
 #nav-bar figure {
   margin: 0;
 }
+
+.listing {
+  padding: 0.5em;
+  background-color: lightskyblue;
+  border-radius: 20px;
+}
+
+.categories,
+.expiry-status,
+.sorts {
+  border: solid black;
+  padding: 0.2em;
+}

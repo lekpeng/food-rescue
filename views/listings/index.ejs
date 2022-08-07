@@ -9,7 +9,7 @@
         <h1>All Listings</h1>
         <form method="GET" action="/listings">
           <div class="sorts">
-            <p>Sort by:</p>
+            <h6>Sort by:</h6>
             <div class="form-check form-check-inline">
               <input class="form-check-input mr-3" type="radio" name="sort" id="latest" checked />
               <label class="form-check-label" for="latest"> Latest</label>
@@ -19,9 +19,25 @@
               <label class="form-check-label" for="nearest"> Nearest </label>
             </div>
           </div>
-          <div class="categories">
-            <p>Categories:</p>
-            <!-- other categories:  snacks, fresh produce, condiments, canned food, beverage, chilled and frozen food  -->
+          <div class="mt-3 expiry-status">
+            <h6>Expiry Status:</h6>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                name="not-expired"
+                id="not-expired"
+                checked
+              />
+              <label class="form-check-label" for="not-expired">Not expired</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" name="expired" id="expired" checked />
+              <label class="form-check-label" for="expired">Expired</label>
+            </div>
+          </div>
+          <div class="mt-3 categories">
+            <h6>Categories:</h6>
             <div class="form-check form-check-inline">
               <input
                 class="form-check-input"
@@ -42,17 +58,74 @@
               />
               <label class="form-check-label" for="bread-and-pastry">Bread and Pastry</label>
             </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" name="snacks" id="snacks" checked />
+              <label class="form-check-label" for="snacks">Snacks</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                name="fresh-produce"
+                id="fresh-produce"
+                checked
+              />
+              <label class="form-check-label" for="fresh-produce">Fresh Produce</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                name="condiments"
+                id="condiments"
+                checked
+              />
+              <label class="form-check-label" for="condiments">Condiments</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                name="canned-food"
+                id="canned-food"
+                checked
+              />
+              <label class="form-check-label" for="canned-food">Canned Food</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                name="beverage"
+                id="beverage"
+                checked
+              />
+              <label class="form-check-label" for="beverage">Beverage</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                name="chilled-and-frozen-food"
+                id="chilled-and-frozen-food"
+                checked
+              />
+              <label class="form-check-label" for="chilled-and-frozen-food"
+                >Chilled and Frozen Food</label
+              >
+            </div>
           </div>
 
-          <input class="btn btn-primary" type="submit" value="Apply" />
+          <input class="mt-3 mb-3 btn btn-primary" type="submit" value="Apply" />
         </form>
         <main class="listings">
           <!-- filter and display listings here -->
           <%listings.forEach(listing => {%>
           <div class="mb-5 listing">
             <h4><%=listing.listing_name%></h4>
-            <p>EXP Date: <%=listing.expiry_date.toDateString() %></p>
-            <p>Pick Up: <%=listing.pick_up_days_and_times%></p>
+            <h5>Posted by: <%=listing.user.username%></h5>
+            <p>Distance away: <%=listing.distance_away%> km</p>
+            <p>Expiry date: <%=listing.expiry_date.toDateString() %></p>
           </div>
 
           <%})%>

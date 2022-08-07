@@ -3,6 +3,20 @@ const userModel = require("../../models/users/users");
 const listingValidators = require("../validators/listings");
 const mongoose = require("mongoose");
 
+const deg2rad = (deg) => deg * (Math.PI / 180);
+
+const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
+  const R = 6371; // Radius of the earth in km
+  const dLat = deg2rad(lat2 - lat1);
+  const dLon = deg2rad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const d = R * c; // Distance in km
+  return Math.round(d * 10) / 10;
+};
+
 const controller = {
   index: async (req, res) => {
     console.log("------->Indexing listings<--------");
@@ -14,9 +28,24 @@ const controller = {
     // show only those avail
     // format expiry date
     // get distance away from user POV and display accordingly
+    let userLat, userLon;
+    try {
+      [userLat, userLon] = req.session.currentUser.location;
+    } catch (err) {
+      userLat = 0;
+      userLon = 0;
+    }
 
     try {
-      const listings = await listingModel.find({ status: "available" }).exec();
+      const allListings = await listingModel.find({ status: "available" }).populate("user").exec();
+      const listings = allListings.map((listing) => {
+        // const listingName = listing.listing_name;
+        // const listingExpiryDate = listing.expiry_date;
+        // const listingPosterUsername = listing.user.username;
+        const [posterLat, posterLon] = listing.user.location;
+        listing.distance_away = getDistanceFromLatLonInKm(userLat, userLon, posterLat, posterLon);
+        return listing;
+      });
 
       res.render("listings/index", { listings });
     } catch (err) {

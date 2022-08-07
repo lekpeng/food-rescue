@@ -81,7 +81,7 @@ app.delete("/logout", userController.logout);
 
 //Listings
 // app.get("/listings", authMiddleware.isAuthenticated, listingController.index);
-app.get("/listings", authMiddleware.isAuthenticated, listingController.index);
+app.get("/listings", listingController.index);
 app.get("/listings/new", listingController.showNewListingForm);
 app.post("/listings", upload.single("listing_image"), listingController.createListing);
 // to use: after testing done
