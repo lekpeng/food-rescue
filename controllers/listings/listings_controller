@@ -1,5 +1,7 @@
 const listingModel = require("../../models/listings/listings");
+const userModel = require("../../models/users/users");
 const listingValidators = require("../validators/listings");
+const mongoose = require("mongoose");
 
 const controller = {
   index: (req, res) => {
@@ -17,29 +19,63 @@ const controller = {
     res.render("listings/new", { errorMsg: false });
   },
 
-  createListing: (req, res) => {
+  createListing: async (req, res) => {
     console.log("------->Create New Listing<--------");
-    console.log("req.body", req.body);
     console.log("req.file", req.file);
+    // console.log("------->req.file.path", req.file.path);
 
-    // validation
+    const currentUser = req.session.currentUser;
+    console.log("!!!!currentUser", currentUser);
+
+    // validation for req.body
     let errorMsg = false;
     const validationResults = listingValidators.createListingValidator.validate(req.body);
 
     if (validationResults.error) {
-      const rawMessage = validationResults.error.details[0].message;
-      console.log("raw message", rawMessage);
-      res.send("something went wrong");
+      errorMsg = validationResults.error.details[0].message;
+      res.render("listings/new", { errorMsg });
       return;
     }
 
-    // upload in wrong format
-    if (req.fileValidationError) {
-      res.send("wrong upload format");
-      return;
-    }
+    const validatedResults = validationResults.value;
 
-    res.send("upload success");
+    // validation for req.file -> upload in wrong format
+    // if (req.fileValidationError) {
+    //   errorMsg = req.fileValidationError;
+    //   res.render("listings/new", { errorMsg });
+    //   return;
+    // }
+
+    // try {
+    // create the listing and store in DB
+    const currentListing = {
+      _id: new mongoose.Types.ObjectId(),
+      user: currentUser._id,
+      listing_name: validatedResults.listing_name,
+      description: validatedResults.description,
+      pick_up_days_and_times: validatedResults.pick_up_days_and_times,
+      category: validatedResults.category,
+      expiry_date: validatedResults.expiry_date,
+      // listing_image_url: req.file.path,
+    };
+
+    await listingModel.create(currentListing);
+
+    // add listing to user (this works)
+    await userModel.findOneAndUpdate(
+      { _id: currentUser._id },
+      {
+        $push: { listings: currentListing._id },
+      }
+    );
+
+    // } catch (err) {
+    //   errorMsg = "Something went wrong. Please try creating the listing again.";
+    //   res.render("listings/new", { errorMsg });
+    //   return;
+    // }
+
+    res.redirect("/listings");
   },
 };
 

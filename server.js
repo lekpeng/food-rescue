@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const userController = require("./controllers/users/users_controller");
 const listingController = require("./controllers/listings/listings_controller");
+const seeding = require("./seeds/seeding");
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -44,6 +45,7 @@ const upload = multer({
     }
   },
 });
+``;
 
 //MIDDLEWARE
 app.set("view engine", "ejs");
@@ -65,6 +67,9 @@ app.use(
 app.get("/", authMiddleware.isAuthenticated, (req, res) => {
   res.redirect("/listings");
 });
+
+//Seeding
+app.get("/seed/users", seeding.seedUsers);
 
 //Login/Logout and Signup
 app.get("/login", userController.showLoginForm);

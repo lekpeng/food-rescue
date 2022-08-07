@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const listingSchema = new mongoose.Schema({
-  poster_user_id: {
+  user: {
     type: Schema.Types.ObjectId,
     ref: "User",
   },
 
-  name: {
+  listing_name: {
     type: String,
     required: true,
   },
@@ -16,17 +16,12 @@ const listingSchema = new mongoose.Schema({
     type: String,
   },
 
-  status: {
-    type: String,
-    default: "available",
-  },
-
-  category: {
+  pick_up_days_and_times: {
     type: String,
     required: true,
   },
 
-  listing_image: {
+  category: {
     type: String,
     required: true,
   },
@@ -36,18 +31,24 @@ const listingSchema = new mongoose.Schema({
     required: true,
   },
 
-  pickup_location: {
-    type: [Number],
-  },
-
-  pickup_days_and_times: {
-    type: String,
-    required: true,
-  },
+  // listing_image_url: {
+  //   type: String,
+  //   required: true,
+  // },
 
   date_posted: {
     type: Date,
     default: Date.now,
+  },
+
+  distance_away: {
+    type: Number,
+    default: 0,
+  },
+
+  status: {
+    type: String,
+    default: "available",
   },
 });
 

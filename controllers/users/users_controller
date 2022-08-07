@@ -59,7 +59,7 @@ const controller = {
       }
 
       // store user information in session, typically a user id
-      req.session.user = user.username;
+      req.session.currentUser = user;
 
       // save the session before redirection to ensure page
       // load does not happen before session is saved
@@ -93,8 +93,8 @@ const controller = {
     let errorMsg = false;
     const validationResults = userValidators.signupValidator.validate(req.body);
     if (validationResults.error) {
-      const rawMessage = validationResults.error.details[0].message;
-      errorMsg = rawMessage.charAt(0) + rawMessage.charAt(1).toUpperCase() + rawMessage.slice(2);
+      errorMsg = validationResults.error.details[0].message;
+
       if (errorMsg.includes("[ref:password]")) {
         errorMsg = "The two passwords did not match. Please try again.";
       }
