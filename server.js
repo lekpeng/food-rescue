@@ -1,7 +1,7 @@
 require("dotenv").config();
 
-const userController = require("./controllers/users/users_controller");
-const listingController = require("./controllers/listings/listings_controller");
+const userController = require("./controllers/users/users_controller.js");
+const listingController = require("./controllers/listings/listings_controller.js");
 const seeding = require("./seeds/seeding");
 
 const express = require("express");
@@ -70,6 +70,7 @@ app.get("/", authMiddleware.isAuthenticated, (req, res) => {
 
 //Seeding
 app.get("/seed/users", seeding.seedUsers);
+app.get("/seed/listings", seeding.seedListings);
 
 //Login/Logout and Signup
 app.get("/login", userController.showLoginForm);

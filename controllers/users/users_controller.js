@@ -16,8 +16,9 @@ const controller = {
     const validationResults = userValidators.loginValidator.validate(req.body);
 
     if (validationResults.error) {
-      const rawMessage = validationResults.error.details[0].message;
-      errorMsg = rawMessage.charAt(0) + rawMessage.charAt(1).toUpperCase() + rawMessage.slice(2);
+      errorMsg = validationResults.error.details[0].message;
+      // const rawMessage = validationResults.error.details[0].message;
+      // errorMsg = rawMessage.charAt(0) + rawMessage.charAt(1).toUpperCase() + rawMessage.slice(2);
       res.render("pages/login", { errorMsg });
       return;
     }
