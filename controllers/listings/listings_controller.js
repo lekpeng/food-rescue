@@ -2,6 +2,7 @@ const listingModel = require("../../models/listings/listings");
 const userModel = require("../../models/users/users");
 const listingValidators = require("../validators/listings");
 const mongoose = require("mongoose");
+const { ObjectId } = require("mongodb");
 
 const deg2rad = (deg) => deg * (Math.PI / 180);
 
@@ -18,7 +19,7 @@ const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
 };
 
 const controller = {
-  index: async (req, res) => {
+  indexListings: async (req, res) => {
     console.log("------->Indexing listings<--------");
 
     // get current user's location
@@ -94,8 +95,6 @@ const controller = {
         }
       }
 
-      console.log("UPDATED FORM INPUTS", formInputs);
-
       const allListings = await listingModel.find(mongooseFindFilter).populate("user").exec();
       const listings = allListings.map((listing) => {
         const [posterLat, posterLon] = listing.user.location;
@@ -125,6 +124,57 @@ const controller = {
     }
   },
 
+  showListing: async (req, res) => {
+    //
+    let currentUser, posterUser;
+    // get current user's location
+    let userLat, userLon;
+    try {
+      currentUser = req.session.currentUser;
+      [userLat, userLon] = currentUser.location;
+    } catch (err) {
+      userLat = 0;
+      userLon = 0;
+    }
+
+    // get the listing ID from the route param
+    const listingId = req.params.listingId;
+    let listing;
+    // validate object ID (check if it's 24 digit hex something)
+    if (!ObjectId.isValid(listingId)) {
+      res.render("listings/show", {
+        errorMsg: "Listing not found",
+        listing: null,
+      });
+      return;
+    }
+
+    // get the listing with the id from the database
+    try {
+      listing = await listingModel.findById(listingId).populate("user").exec();
+      const [posterLat, posterLon] = listing.user.location;
+      listing.category = (
+        listing.category.charAt(0).toUpperCase() + listing.category.slice(1)
+      ).replaceAll("-", " ");
+      listing.distance_away = getDistanceFromLatLonInKm(userLat, userLon, posterLat, posterLon);
+      posterUser = listing.user;
+    } catch (err) {
+      res.render("listings/show", {
+        errorMsg: "Failed to retrieve listing. Please refresh.",
+        listing: [],
+      });
+      return;
+    }
+
+    // render the "show" ejs template
+
+    res.render("listings/show", {
+      errorMsg: "",
+      listing,
+      currentUserIsPoster: currentUser.username === posterUser.username,
+    });
+  },
+
   showNewListingForm: (req, res) => {
     console.log("------->Show New Listing Form<--------");
     const dateObj = new Date();
@@ -141,7 +191,6 @@ const controller = {
     // console.log("------->req.file.path", req.file.path);
 
     const currentUser = req.session.currentUser;
-    console.log("!!!!currentUser", currentUser);
 
     // validation for req.body
     let errorMsg = false;
@@ -193,6 +242,8 @@ const controller = {
 
     res.redirect("/listings");
   },
+
+  deleteListing: async (req, res) => {},
 };
 
 module.exports = controller;

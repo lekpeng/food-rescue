@@ -45,7 +45,6 @@ const upload = multer({
     }
   },
 });
-``;
 
 //MIDDLEWARE
 app.set("view engine", "ejs");
@@ -81,9 +80,12 @@ app.delete("/logout", userController.logout);
 
 //Listings
 // app.get("/listings", authMiddleware.isAuthenticated, listingController.index);
-app.get("/listings", listingController.index);
-app.get("/listings/new", listingController.showNewListingForm);
+
+app.get("/listings", listingController.indexListings);
+app.get("/listings/new", listingController.showNewListingForm); //!! more specific route first so new comes before :listingId
+app.get("/listings/:listingId", listingController.showListing);
 app.post("/listings", upload.single("listing_image"), listingController.createListing);
+app.delete("/listings/:listingId", listingController.deleteListing);
 // to use: after testing done
 
 app.listen(port, async () => {

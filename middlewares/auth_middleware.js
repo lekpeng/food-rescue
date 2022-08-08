@@ -11,7 +11,7 @@ module.exports = {
   setAuthUserVar: (req, res, next) => {
     res.locals.authUser = null;
 
-    if (req.session.user) {
+    if (req.session.currentUser) {
       res.locals.authUser = req.session.currentUser;
     }
 

@@ -7,6 +7,7 @@
     <div class="constrained-full-height" id="page-index-listings">
       <div class="container">
         <h1>All Listings</h1>
+        <a class="btn btn-primary" href="/listings/new">Create new listing</a>
         <form method="GET" action="/listings">
           <div class="sorts">
             <h6>Sort by:</h6>
@@ -95,6 +96,7 @@
         <main class="listings">
           <!-- filter and display listings here -->
           <%listings.forEach(listing => {%>
+
           <div class="mb-5 listing">
             <h4><%=listing.listing_name%></h4>
             <h5>
@@ -103,6 +105,7 @@
             <p>Category: <%=listing.category%></p>
             <p>Distance away: <%=listing.distance_away%> km</p>
             <p>Expiry date: <%=listing.expiry_date.toDateString() %></p>
+            <a class="btn btn-success" href="/listings/<%= listing._id %>">View</a>
           </div>
 
           <%})%>

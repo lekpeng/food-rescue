@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/header'); %>
+  <body>
+    <%- include('../partials/nav'); %>
+
+    <div class="constrained-full-height" id="page-index-listings">
+      <div class="container">
+        <!-- Listing name -->
+        <%- include('../partials/errors'); %> <%if(listing){%>
+        <main class="listing">
+          <div id="poster-user-location"><%=listing.user.location%></div>
+          <h3></h1>
+          <h1><%=listing.listing_name%></h1>
+          <h5>Posted by <%=listing.user.username%> on <%=listing.date_posted.toLocaleString()%></h5>
+          <%if (listing.description){%>
+          <p>Description: <%=listing.description%></p>
+          <%}%>
+          <p>Pick up days and times: <%=listing.pick_up_days_and_times%></p>
+          <p>Distance away: <%=listing.distance_away%> km</p>
+          <p>Expiry date: <%=listing.expiry_date.toDateString() %></p>
+
+          <div class="mb-3 text-center" id="map"></div>
+
+          <%if(currentUserIsPoster){%>
+          <a href="" class="btn btn-secondary">Edit Listing</a>
+          <a href="" class="btn btn-danger">Delete Listing</a>
+          <%} else {%>
+          <a href="" class="btn btn-success">Chat</a>
+          <%}%> <%}%>
+        </main>
+      </div>
+    </div>
+    <%- include('../partials/footer'); %>
+    <script
+      src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+      integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+      crossorigin=""
+    ></script>
+    <script src="/scripts/map_show_listing.js"></script>
+
+  </body>
+</html>
