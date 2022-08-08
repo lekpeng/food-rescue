@@ -20,14 +20,8 @@ const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
 const controller = {
   index: async (req, res) => {
     console.log("------->Indexing listings<--------");
-    const userQuery = req.query;
 
-    console.log("userQuery", userQuery);
-
-    // filter and sort according to user query. default is latest, all categories.
-    // show only those avail
-    // format expiry date
-    // get distance away from user POV and display accordingly
+    // get current user's location
     let userLat, userLon;
     try {
       [userLat, userLon] = req.session.currentUser.location;
@@ -37,17 +31,69 @@ const controller = {
     }
 
     try {
-      const allListings = await listingModel.find({ status: "available" }).populate("user").exec();
+      // filter and sort according to user query. default is latest, all categories.
+      const mongooseFindFilter = { $and: [{ status: "available" }] };
+      const formInputs = {
+        sort: { latest: "on", nearest: "off" },
+        categories: {
+          "rice-and-noodles": "on",
+          "bread-and-pastry": "on",
+          snacks: "on",
+          "fresh-produce": "on",
+          condiments: "on",
+          "canned-food": "on",
+          beverage: "on",
+          "chilled-and-frozen-food": "on",
+        },
+      };
+      // let mongooseSortFilter = { date_posted: 1 };
+      const userQuery = req.query;
+      console.log("userQuery", userQuery);
+      const categoryFilter = [];
+      const expiryFilter = [];
+
+      for (const key in userQuery) {
+        // filters: categories
+        if (key !== "sort" && key !== "expired" && key !== "not-expired") {
+          categoryFilter.push(key);
+        }
+        mongooseFindFilter["$and"].push({ category: { $in: categoryFilter } });
+      }
+
+      // update form inputs if not default
+      if (categoryFilter.length) {
+        for (const category in formInputs.categories) {
+          if (!categoryFilter.includes(category)) {
+            formInputs["categories"][category] = "off";
+          }
+        }
+        console.log("UPDATED FORM INPUTS FOR CAT", formInputs);
+      }
+
+      const allListings = await listingModel.find(mongooseFindFilter).populate("user").exec();
       const listings = allListings.map((listing) => {
-        // const listingName = listing.listing_name;
-        // const listingExpiryDate = listing.expiry_date;
-        // const listingPosterUsername = listing.user.username;
         const [posterLat, posterLon] = listing.user.location;
+        listing.category = (
+          listing.category.charAt(0).toUpperCase() + listing.category.slice(1)
+        ).replaceAll("-", " ");
         listing.distance_away = getDistanceFromLatLonInKm(userLat, userLon, posterLat, posterLon);
         return listing;
       });
 
-      res.render("listings/index", { listings });
+      // default sort: by latest
+      listings.sort((listingA, listingB) => {
+        return Number(listingB.date_posted) - Number(listingA.date_posted);
+      });
+
+      if (userQuery.sort === "nearest") {
+        formInputs.sort.latest = "off";
+        formInputs.sort.nearest = "on";
+        listings.sort((listingA, listingB) => {
+          return listingA.distance_away - listingB.distance_away;
+        });
+      }
+
+      res.render("listings/index", { listings, formInputs });
     } catch (err) {
       console.log("Err displaying listings", err);
     }

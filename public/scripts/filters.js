@@ -1,15 +1,23 @@
-const toggleFilter = (event) => {
-  console.log("running toggleFilter");
-  const filter = event.target;
-  if (filter.className === "filter btn btn-success") {
-    filter.className = "filter btn btn-secondary";
-    filter.value = "";
-    return;
-  }
-  filter.className = "filter btn btn-success";
-  filter.value = filter.name.replace("_", " ");
-};
+// const toggleFilter = (event) => {
+//   console.log("running toggleFilter");
+//   const filter = event.target;
+//   if (filter.className === "filter btn btn-success") {
+//     filter.className = "filter btn btn-secondary";
+//     filter.value = "";
+//     return;
+//   }
+//   filter.className = "filter btn btn-success";
+//   filter.value = filter.name.replace("_", " ");
+// };
 
-document.querySelectorAll(".filter").forEach((filter) => {
-  filter.addEventListener("click", toggleFilter);
+// document.querySelectorAll(".filter").forEach((filter) => {
+//   filter.addEventListener("click", toggleFilter);
+// });
+
+document.querySelectorAll(".on").forEach((input) => {
+  input.checked = true;
+});
+
+document.querySelectorAll(".off").forEach((input) => {
+  input.checked = false;
 });
