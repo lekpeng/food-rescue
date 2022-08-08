@@ -32,7 +32,9 @@ const controller = {
 
     try {
       // filter and sort according to user query. default is latest, all categories.
-      const mongooseFindFilter = { $and: [{ status: "available" }] };
+      const mongooseFindFilter = {
+        $and: [{ status: "available" }],
+      };
       const formInputs = {
         sort: { latest: "on", nearest: "off" },
         categories: {
@@ -45,30 +47,54 @@ const controller = {
           beverage: "on",
           "chilled-and-frozen-food": "on",
         },
+        expiry: {
+          expired: "on",
+          "not-expired": "on",
+        },
       };
       // let mongooseSortFilter = { date_posted: 1 };
       const userQuery = req.query;
       console.log("userQuery", userQuery);
       const categoryFilter = [];
-      const expiryFilter = [];
+      const expiryFilter = {};
 
       for (const key in userQuery) {
+        const today = new Date();
+        // filters: expiry status
+        if (key === "expired") {
+          expiryFilter["$lte"] = today;
+        }
+
+        if (key === "not-expired") {
+          expiryFilter["$gt"] = today;
+        }
         // filters: categories
-        if (key !== "sort" && key !== "expired" && key !== "not-expired") {
+        if (key !== "sort") {
           categoryFilter.push(key);
         }
-        mongooseFindFilter["$and"].push({ category: { $in: categoryFilter } });
       }
+      console.log("!!!expiryFilter", expiryFilter);
 
       // update form inputs if not default
       if (categoryFilter.length) {
+        mongooseFindFilter["$and"].push({ category: { $in: categoryFilter } });
         for (const category in formInputs.categories) {
           if (!categoryFilter.includes(category)) {
             formInputs["categories"][category] = "off";
           }
         }
-        console.log("UPDATED FORM INPUTS FOR CAT", formInputs);
       }
+
+      if (Object.keys(expiryFilter).length === 1) {
+        mongooseFindFilter["$and"].push({ expiry_date: expiryFilter });
+        if (Object.keys(expiryFilter)[0] === "$lte") {
+          formInputs["expiry"]["not-expired"] = "off";
+        } else {
+          formInputs["expiry"]["expired"] = "off";
+        }
+      }
+
+      console.log("UPDATED FORM INPUTS", formInputs);
 
       const allListings = await listingModel.find(mongooseFindFilter).populate("user").exec();
       const listings = allListings.map((listing) => {
