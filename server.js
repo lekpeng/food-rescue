@@ -94,7 +94,7 @@ app.delete("/listings/:listingId", listingController.deleteListing);
 // 6) Edit
 app.get("/listings/:listingId/edit", listingController.showEditListingForm);
 // 7) Update
-// app.put("/listings/:listingId", listingController.updateListing);
+app.put("/listings/:listingId", upload.single("listing_image"), listingController.updateListing);
 
 app.listen(port, async () => {
   try {

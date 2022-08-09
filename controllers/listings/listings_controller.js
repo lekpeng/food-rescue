@@ -297,9 +297,6 @@ const controller = {
     const year = dateObj.getFullYear().toString();
     const month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
     const day = ("0" + dateObj.getDate()).slice(-2);
-    console.log("year", year);
-    console.log("month", month);
-    console.log("day", day);
     const expiryDate = `${year}-${month}-${day}`;
 
     res.render("listings/edit", {
@@ -307,8 +304,50 @@ const controller = {
       categoryForm,
       listing,
       errorMsg: null,
-      referer: req.headers.referer,
     });
+  },
+
+  updateListing: async (req, res) => {
+    console.log("-------> update listing <----------");
+    const currentUser = req.session.currentUser;
+    const listingId = req.params.listingId;
+
+    // validation for req.body
+    let errorMsg = false;
+    console.log("listingId", listingId);
+    console.log("req body", req.body);
+    const validationResults = listingValidators.createListingValidator.validate(req.body);
+
+    if (validationResults.error) {
+      errorMsg = validationResults.error.details[0].message;
+      res.send(errorMsg);
+      // res.render("listings/edit", { errorMsg });
+      return;
+    }
+
+    const validatedResults = validationResults.value;
+
+    // validation for req.file -> upload in wrong format
+    // if (req.fileValidationError) {
+    //   errorMsg = req.fileValidationError;
+    //   res.render("listings/new", { errorMsg });
+    //   return;
+    // }
+
+    // try {
+    // create the listing and store in DB
+    const updateListing = {
+      listing_name: validatedResults.listing_name,
+      description: validatedResults.description,
+      pick_up_days_and_times: validatedResults.pick_up_days_and_times,
+      category: validatedResults.category,
+      expiry_date: validatedResults.expiry_date,
+      // listing_image_url: req.file.path,
+    };
+
+    console.log("updated listing", updateListing);
+    await listingModel.findOneAndUpdate({ _id: listingId }, updateListing);
+    res.redirect(`/listings/${listingId}`);
   },
 };
 

@@ -4,12 +4,12 @@
   <body>
     <%- include('../partials/nav'); %>
 
-    <div class="constrained-full-height" id="page-new-listings">
+    <div class="constrained-full-height" id="page-edit-listing">
       <div class="container">
         <h1>Edit Listing</h1>
         <form
           method="POST"
-          action="/listings/<%= listing._id %>?_method=PUT"
+          action="/listings/<%=listing._id%>?_method=PUT"
           enctype="multipart/form-data"
           autocomplete="off"
         >
@@ -41,6 +41,7 @@
               class="form-control"
               value="<%=listing.description%>"
               id="description"
+              name="description"
               rows="3"
             ></textarea>
           </div>
@@ -68,7 +69,7 @@
               <option class="<%=categoryForm["condiments"]%>" value="condiments">Condiments</option>
               <option class="<%=categoryForm["canned-food"]%>" value="canned-food">Canned food</option>
               <option class="<%=categoryForm["beverage"]%>" value="beverage">Beverage</option>
-              <option class="<%=categoryForm["beverage"]%>" value="chilled-and-frozen-food">Chilled and frozen food</option>
+              <option class="<%=categoryForm["chilled-and-frozen-food"]%>" value="chilled-and-frozen-food">Chilled and frozen food</option>
             </select>
           </div>
 
@@ -83,9 +84,8 @@
               required
             />
           </div>
-          <input type="hidden" name="referer" value="<%=referer%>" />
           <div class="mb-3 text-center">
-            <input type="submit" value="Upload Listing" class="btn btn-primary" /><br /><br />
+            <input type="submit" value="Save changes" class="btn btn-primary" /><br /><br />
           </div>
         </form>
       </div>

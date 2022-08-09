@@ -4,7 +4,7 @@
   <body>
     <%- include('../partials/nav'); %>
 
-    <div class="constrained-full-height" id="page-new-listings">
+    <div class="constrained-full-height" id="page-new-listing">
       <div class="container">
         <h1>Create a new listing</h1>
         <form method="POST" action="/listings/" enctype="multipart/form-data" autocomplete="off">
@@ -31,7 +31,7 @@
 
           <div class="mb-3 justify-center">
             <label for="description" class="form-label ps-0">Description (optional)</label>
-            <textarea class="form-control" id="description" rows="3"></textarea>
+            <textarea name="description" class="form-control" id="description" rows="3"></textarea>
             <!-- <input type="text" class="form-control" id="description" name="description" /> -->
           </div>
 

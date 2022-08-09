@@ -9,7 +9,7 @@
         <!-- Listing name -->
         <%- include('../partials/errors'); %> <%if(listing){%>
         <main class="listing">
-          <div id="poster-user-location"><%=listing.user.location%></div>
+          <div id="poster-user-location" style="display: none"><%=listing.user.location%></div>
           <h1><%=listing.listing_name%></h1>
           <h5>Posted by <%=listing.user.username%> on <%=listing.date_posted.toLocaleString()%></h5>
           <%if (listing.description){%>
