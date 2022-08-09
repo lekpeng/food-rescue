@@ -6,8 +6,13 @@
 
     <div class="constrained-full-height" id="page-new-listings">
       <div class="container">
-        <h1>Create a new listing</h1>
-        <form method="POST" action="/listings/" enctype="multipart/form-data" autocomplete="off">
+        <h1>Edit Listing</h1>
+        <form
+          method="POST"
+          action="/listings/<%= listing._id %>?_method=PUT"
+          enctype="multipart/form-data"
+          autocomplete="off"
+        >
           <%- include('../partials/errors'); %>
 
           <!-- prompt user to upload image -->
@@ -25,14 +30,19 @@
               class="form-control"
               id="listing_name"
               name="listing_name"
+              value="<%=listing.listing_name%>"
               required
             />
           </div>
 
           <div class="mb-3 justify-center">
             <label for="description" class="form-label ps-0">Description (optional)</label>
-            <textarea class="form-control" id="description" rows="3"></textarea>
-            <!-- <input type="text" class="form-control" id="description" name="description" /> -->
+            <textarea
+              class="form-control"
+              value="<%=listing.description%>"
+              id="description"
+              rows="3"
+            ></textarea>
           </div>
 
           <div class="mb-3 justify-center">
@@ -42,6 +52,7 @@
             <input
               type="text"
               class="form-control"
+              value="<%=listing.pick_up_days_and_times%>"
               id="pick_up_days_and_times"
               name="pick_up_days_and_times"
               required
@@ -50,45 +61,22 @@
           <div class="mb-3 justify-center">
             <label for="category" class="form-label ps-0">Category</label>
             <select name="category" id="categoryOptions">
-              <option value="rice-and-noodles">Rice and noodles</option>
-              <option value="bread-and-pastry">Bread and pastry</option>
-              <option value="snacks">Snacks</option>
-              <option value="fresh-produce">Fresh produce</option>
-              <option value="condiments">Condiments</option>
-              <option value="canned-food">Canned food</option>
-              <option value="beverage">Beverage</option>
-              <option value="chilled-and-frozen-food">Chilled and frozen food</option>
+              <option class="<%=categoryForm["rice-and-noodles"]%>" value="rice-and-noodles">Rice and noodles</option>
+              <option class="<%=categoryForm["bread-and-pastry"]%>" value="bread-and-pastry">Bread and pastry</option>
+              <option class="<%=categoryForm["snacks"]%>" value="snacks">Snacks</option>
+              <option class="<%=categoryForm["fresh-produce"]%>" value="fresh-produce">Fresh produce</option>
+              <option class="<%=categoryForm["condiments"]%>" value="condiments">Condiments</option>
+              <option class="<%=categoryForm["canned-food"]%>" value="canned-food">Canned food</option>
+              <option class="<%=categoryForm["beverage"]%>" value="beverage">Beverage</option>
+              <option class="<%=categoryForm["beverage"]%>" value="chilled-and-frozen-food">Chilled and frozen food</option>
             </select>
           </div>
-
-          <!-- <div class="mb-3 justify-center">
-            <label for="category" class="form-label ps-0">Category</label>
-            <input
-              type="text"
-              class="form-control"
-              list="categoryOptions"
-              id="category"
-              name="category"
-              autocomplete="off"
-              required
-            />
-            <datalist id="categoryOptions">
-              <option value="Rice and Noodles"></option>
-              <option value="Bread and Pastry"></option>
-              <option value="Snacks"></option>
-              <option value="Fresh Produce"></option>
-              <option value="Condiments"></option>
-              <option value="Canned Food"></option>
-              <option value="Beverage"></option>
-              <option value="Chilled and Frozen Food"></option>
-            </datalist>
-          </div> -->
 
           <div class="mb-3 justify-center">
             <label for="expiry_date" class="form-label ps-0">Expiry Date</label>
             <input
               type="date"
-              value="<%=todayDate%>"
+              value="<%=expiryDate%>"
               class="form-control"
               id="expiry_date"
               name="expiry_date"
@@ -103,5 +91,6 @@
       </div>
     </div>
     <%- include('../partials/footer'); %>
+    <script src="/scripts/filters_select.js"></script>
   </body>
 </html>

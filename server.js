@@ -81,12 +81,20 @@ app.delete("/logout", userController.logout);
 //Listings
 // app.get("/listings", authMiddleware.isAuthenticated, listingController.index);
 
+// 1) Index
 app.get("/listings", listingController.indexListings);
+// 2) New
 app.get("/listings/new", listingController.showNewListingForm); //!! more specific route first so new comes before :listingId
+// 3) Show
 app.get("/listings/:listingId", listingController.showListing);
+// 4) Create
 app.post("/listings", upload.single("listing_image"), listingController.createListing);
+// 5) Destroy
 app.delete("/listings/:listingId", listingController.deleteListing);
-// to use: after testing done
+// 6) Edit
+app.get("/listings/:listingId/edit", listingController.showEditListingForm);
+// 7) Update
+// app.put("/listings/:listingId", listingController.updateListing);
 
 app.listen(port, async () => {
   try {

@@ -10,7 +10,6 @@
         <%- include('../partials/errors'); %> <%if(listing){%>
         <main class="listing">
           <div id="poster-user-location"><%=listing.user.location%></div>
-          <h3></h1>
           <h1><%=listing.listing_name%></h1>
           <h5>Posted by <%=listing.user.username%> on <%=listing.date_posted.toLocaleString()%></h5>
           <%if (listing.description){%>
@@ -23,8 +22,11 @@
           <div class="mb-3 text-center" id="map"></div>
 
           <%if(currentUserIsPoster){%>
-          <a href="" class="btn btn-secondary">Edit Listing</a>
-          <a href="" class="btn btn-danger">Delete Listing</a>
+          <a href="/listings/<%=listing._id%>/edit" class="btn btn-secondary">Edit Listing</a>
+          <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
+            <input type="hidden" name="referer" value="<%=referer%>" />
+            <button type="submit" class="btn btn-danger">Delete Listing</button>
+          </form>
           <%} else {%>
           <a href="" class="btn btn-success">Chat</a>
           <%}%> <%}%>
@@ -38,6 +40,5 @@
       crossorigin=""
     ></script>
     <script src="/scripts/map_show_listing.js"></script>
-
   </body>
 </html>

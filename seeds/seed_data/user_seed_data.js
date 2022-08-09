@@ -1,5 +1,12 @@
 const users = [
   {
+    username: "lekpeng",
+    email: "lekpeng96@hotmail.com",
+    password: "lekpeng",
+    location: [1.348632, 103.867469],
+  },
+
+  {
     username: "ryan",
     email: "ryan@gmail.com",
     password: "ryan1234",

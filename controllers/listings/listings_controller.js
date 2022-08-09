@@ -125,8 +125,8 @@ const controller = {
   },
 
   showListing: async (req, res) => {
-    //
     let currentUser, posterUser;
+
     // get current user's location
     let userLat, userLon;
     try {
@@ -172,6 +172,7 @@ const controller = {
       errorMsg: "",
       listing,
       currentUserIsPoster: currentUser.username === posterUser.username,
+      referer: req.headers.referer,
     });
   },
 
@@ -179,10 +180,10 @@ const controller = {
     console.log("------->Show New Listing Form<--------");
     const dateObj = new Date();
     const year = dateObj.getFullYear().toString();
-    const month = ("0" + dateObj.getDate()).slice(-2);
-    const day = ("0" + (dateObj.getMonth() + 1)).slice(-2);
+    const month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
+    const day = ("0" + dateObj.getDate()).slice(-2);
     const todayDate = `${year}-${month}-${day}`;
-    res.render("listings/new", { todayDate, errorMsg: false });
+    res.render("listings/new", { todayDate, errorMsg: null, referer: req.headers.referer });
   },
 
   createListing: async (req, res) => {
@@ -194,7 +195,11 @@ const controller = {
 
     // validation for req.body
     let errorMsg = false;
-    const validationResults = listingValidators.createListingValidator.validate(req.body);
+
+    const stuffToValidate = { ...req.body };
+    delete stuffToValidate["referer"];
+    console.log("stuff to validate", stuffToValidate);
+    const validationResults = listingValidators.createListingValidator.validate(stuffToValidate);
 
     if (validationResults.error) {
       errorMsg = validationResults.error.details[0].message;
@@ -240,10 +245,71 @@ const controller = {
     //   return;
     // }
 
-    res.redirect("/listings");
+    // redirect user to previous page before show
+    if (req.body.referer) {
+      res.redirect(req.body.referer);
+    } else {
+      res.redirect("/");
+    }
   },
 
-  deleteListing: async (req, res) => {},
+  deleteListing: async (req, res) => {
+    const listingId = req.params.listingId;
+
+    // need delete reference from owner of listing
+    const listing = await listingModel.findById(listingId).populate("user").exec();
+    await userModel.findOneAndUpdate(
+      { _id: listing.user._id },
+      {
+        $pull: { listings: listing._id },
+      }
+    );
+
+    // delete listing
+    await listingModel.findByIdAndDelete(listingId).exec();
+    // redirect user to previous page before show
+    if (req.body.referer) {
+      res.redirect(req.body.referer);
+    } else {
+      res.redirect("/");
+    }
+  },
+
+  showEditListingForm: async (req, res) => {
+    console.log("------->Show Edit Listing Form<--------");
+    // make sure form displays only if user is owner
+
+    const categoryForm = {
+      "rice-and-noodles": "no",
+      "bread-and-pastry": "no",
+      snacks: "no",
+      "fresh-produce": "no",
+      condiments: "no",
+      "canned-food": "no",
+      beverage: "no",
+      "chilled-and-frozen-food": "no",
+    };
+    const listingId = req.params.listingId;
+    const listing = await listingModel.findById(listingId).populate("user").exec();
+    categoryForm[listing.category] = "yes";
+
+    const dateObj = listing.expiry_date;
+    const year = dateObj.getFullYear().toString();
+    const month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
+    const day = ("0" + dateObj.getDate()).slice(-2);
+    console.log("year", year);
+    console.log("month", month);
+    console.log("day", day);
+    const expiryDate = `${year}-${month}-${day}`;
+
+    res.render("listings/edit", {
+      expiryDate,
+      categoryForm,
+      listing,
+      errorMsg: null,
+      referer: req.headers.referer,
+    });
+  },
 };
 
 module.exports = controller;
