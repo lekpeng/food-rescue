@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const userModel = require("../../models/users/users");
+const listingModel = require("../../models/listings/listings");
 const userValidators = require("../validators/users");
 
 const controller = {
@@ -129,6 +130,17 @@ const controller = {
     }
 
     res.redirect("/login");
+  },
+
+  seeProfile: async (req, res) => {
+    let errorMsg;
+    const username = req.params.username;
+    const allListings = await listingModel.find({}).populate("user").exec();
+    const listings = allListings.filter((listing) => listing.user.username === username);
+    if (!listings.length) {
+      errorMsg = "User not found!";
+    }
+    res.render("pages/profile", { listings, username, errorMsg });
   },
 };
 

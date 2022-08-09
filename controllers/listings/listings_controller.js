@@ -278,6 +278,14 @@ const controller = {
   showEditListingForm: async (req, res) => {
     console.log("------->Show Edit Listing Form<--------");
     // make sure form displays only if user is owner
+    const currentUserUsername = req.session.currentUser.username;
+    const listingId = req.params.listingId;
+    const listing = await listingModel.findById(listingId).populate("user").exec();
+
+    if (listing.user.username !== currentUserUsername) {
+      res.render("pages/unauthorized");
+      return;
+    }
 
     const categoryForm = {
       "rice-and-noodles": "no",
@@ -289,8 +297,6 @@ const controller = {
       beverage: "no",
       "chilled-and-frozen-food": "no",
     };
-    const listingId = req.params.listingId;
-    const listing = await listingModel.findById(listingId).populate("user").exec();
     categoryForm[listing.category] = "yes";
 
     const dateObj = listing.expiry_date;

@@ -67,20 +67,21 @@ app.get("/", authMiddleware.isAuthenticated, (req, res) => {
   res.redirect("/listings");
 });
 
-//Seeding
+// SEEDING ROUTES
 app.get("/seed/users", seeding.seedUsers);
 app.get("/seed/listings", seeding.seedListings);
 
-//Login/Logout and Signup
+// USER ROUTES
 app.get("/login", userController.showLoginForm);
 app.post("/login", userController.login);
 app.get("/signup", userController.showSignupForm);
 app.post("/signup", userController.signup);
 app.delete("/logout", userController.logout);
+app.get("/users/:username", userController.seeProfile);
 
-//Listings
+// LISTING ROUTES
+
 // app.get("/listings", authMiddleware.isAuthenticated, listingController.index);
-
 // 1) Index
 app.get("/listings", listingController.indexListings);
 // 2) New
