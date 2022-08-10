@@ -1,3 +1,5 @@
+require("dotenv").config({ path: "../../.env" });
+
 const listingModel = require("../../models/listings/listings");
 const userModel = require("../../models/users/users");
 const listingValidators = require("../validators/listings");
@@ -173,6 +175,7 @@ const controller = {
       listing,
       currentUserIsPoster: currentUser.username === posterUser.username,
       referer: req.headers.referer,
+      apiKey: process.env.ESRI_API_KEY,
     });
   },
 

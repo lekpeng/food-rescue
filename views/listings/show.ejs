@@ -9,6 +9,7 @@
         <!-- Listing name -->
         <%- include('../partials/errors'); %> <%if(listing){%>
         <main class="listing">
+          <div id="api-key" style="display: none"><%=apiKey%></div>
           <div id="poster-user-location" style="display: none"><%=listing.user.location%></div>
           <h1><%=listing.listing_name%></h1>
           <h5>Posted by <%=listing.user.username%> on <%=listing.date_posted.toLocaleString()%></h5>
@@ -39,6 +40,9 @@
       integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
       crossorigin=""
     ></script>
+    <!-- Load Esri Leaflet from CDN -->
+    <script src="https://unpkg.com/esri-leaflet"></script>
+    <script src="https://unpkg.com/esri-leaflet-geocoder"></script>
     <script src="/scripts/map_show_listing.js"></script>
   </body>
 </html>

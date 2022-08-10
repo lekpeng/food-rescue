@@ -1,7 +1,9 @@
+require("dotenv").config({ path: "../../.env" });
 const bcrypt = require("bcrypt");
 const userModel = require("../../models/users/users");
 const listingModel = require("../../models/listings/listings");
 const userValidators = require("../validators/users");
+const apiKey = process.env.ESRI_API_KEY;
 
 const controller = {
   showLoginForm: (req, res) => {
@@ -85,7 +87,7 @@ const controller = {
 
   showSignupForm: (req, res) => {
     console.log("----->Show sign up form-----");
-    res.render("pages/signup", { errorMsg: false });
+    res.render("pages/signup", { errorMsg: false, apiKey });
   },
 
   signup: async (req, res) => {
@@ -101,7 +103,7 @@ const controller = {
         errorMsg = "The two passwords did not match. Please try again.";
       }
 
-      res.render("pages/signup", { errorMsg });
+      res.render("pages/signup", { errorMsg, apiKey });
       return;
     }
 
@@ -125,7 +127,7 @@ const controller = {
     } catch (err) {
       errorMsg =
         "Either the username or email address has been used before. Please use a different username/email address or login if you have an existing account with us.";
-      res.render("pages/signup", { errorMsg });
+      res.render("pages/signup", { errorMsg, apiKey });
       return;
     }
 
