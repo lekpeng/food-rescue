@@ -78,6 +78,7 @@ app.get("/signup", userController.showSignupForm);
 app.post("/signup", userController.signup);
 app.delete("/logout", userController.logout);
 app.get("/users/:username", userController.seeProfile);
+app.get("/users", userController.redirectProfile);
 
 // LISTING ROUTES
 

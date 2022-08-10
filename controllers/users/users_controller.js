@@ -132,15 +132,31 @@ const controller = {
     res.redirect("/login");
   },
 
+  redirectProfile: async (req, res) => {
+    const currentUserUsername = req.session.currentUser.username;
+    res.redirect(`/users/${currentUserUsername}`);
+  },
+
   seeProfile: async (req, res) => {
     let errorMsg;
     const username = req.params.username;
+    const currentUserUsername = req.session.currentUser.username;
     const allListings = await listingModel.find({}).populate("user").exec();
     const listings = allListings.filter((listing) => listing.user.username === username);
+
+    listings.sort((listingA, listingB) => {
+      return Number(listingB.date_posted) - Number(listingA.date_posted);
+    });
+
     if (!listings.length) {
       errorMsg = "User not found!";
     }
-    res.render("pages/profile", { listings, username, errorMsg });
+    res.render("pages/profile", {
+      listings,
+      username,
+      errorMsg,
+      isProfileOwner: username === currentUserUsername,
+    });
   },
 };
 

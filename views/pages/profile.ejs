@@ -8,9 +8,9 @@
       <div class="container">
         <%- include('../partials/errors'); %> <%if (!errorMsg){%>
         <h1><%=username%>'s Listings</h1>
+        <%if(isProfileOwner){%>
         <a class="btn btn-primary" href="/listings/new">Create new listing</a>
-
-        <%}%>
+        <%} }%>
         <main class="listings">
           <!-- filter and display listings here -->
           <%listings.forEach(listing => {%>

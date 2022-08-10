@@ -100,7 +100,9 @@
           <div class="mb-5 listing">
             <h4><%=listing.listing_name%></h4>
             <h5>
-              Posted by <%=listing.user.username%> on <%=listing.date_posted.toLocaleString()%>
+              Posted by
+              <a href="/users/<%=listing.user.username%>"><%=listing.user.username%></a> on
+              <%=listing.date_posted.toLocaleString()%>
             </h5>
             <p>Category: <%=listing.category%></p>
             <p>Distance away: <%=listing.distance_away%> km</p>
