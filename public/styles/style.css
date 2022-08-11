@@ -53,3 +53,22 @@ footer p {
   border: solid black;
   padding: 0.2em;
 }
+
+.index-listing-img,
+.profile-listing-img {
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+}
+
+.show-listing-img {
+  width: 500px;
+  height: 500px;
+  object-fit: contain;
+}
+
+#preview {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}

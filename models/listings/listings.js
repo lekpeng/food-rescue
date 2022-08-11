@@ -31,10 +31,10 @@ const listingSchema = new mongoose.Schema({
     required: true,
   },
 
-  // listing_image_url: {
-  //   type: String,
-  //   required: true,
-  // },
+  listing_image_url: {
+    type: String,
+    required: true,
+  },
 
   date_posted: {
     type: Date,

@@ -18,6 +18,7 @@
           <div class="mb-5 listing">
             <h4><%=listing.listing_name%></h4>
             <h5>Posted on <%=listing.date_posted.toLocaleString()%></h5>
+            <img class="profile-listing-img" src="<%=listing.listing_image_url%>" alt="" />
             <p>Category: <%=listing.category%></p>
             <p>Distance away: <%=listing.distance_away%> km</p>
             <p>Expiry date: <%=listing.expiry_date.toDateString() %></p>

@@ -13,7 +13,14 @@
           <!-- prompt user to upload image -->
           <div class="mb-3 justify-center">
             <label for="listing_image" class="form-label ps-0">Upload Listing Image</label>
-            <input type="file" class="form-control" id="listing_image" name="listing_image" />
+            <input
+              type="file"
+              onchange="previewFile()"
+              class="form-control"
+              id="listing_image"
+              name="listing_image"
+            />
+            <img src="" id="preview" />
           </div>
 
           <!-- prompt user about pickup location (set it to be sign up location for now) -->
@@ -103,5 +110,25 @@
       </div>
     </div>
     <%- include('../partials/footer'); %>
+    <script>
+      const previewFile = () => {
+        console.log("RUNNING PREVIEW");
+        const preview = document.querySelector("#preview");
+        const file = document.querySelector("#listing_image").files[0];
+        const reader = new FileReader();
+        reader.addEventListener(
+          "load",
+          () => {
+            console.log("ADDING SRC");
+            preview.src = reader.result;
+          },
+          false
+        );
+
+        if (file) {
+          reader.readAsDataURL(file);
+        }
+      };
+    </script>
   </body>
 </html>

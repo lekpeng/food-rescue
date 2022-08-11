@@ -213,40 +213,39 @@ const controller = {
     const validatedResults = validationResults.value;
 
     // validation for req.file -> upload in wrong format
-    // if (req.fileValidationError) {
-    //   errorMsg = req.fileValidationError;
-    //   res.render("listings/new", { errorMsg });
-    //   return;
-    // }
+    if (req.fileValidationError) {
+      errorMsg = req.fileValidationError;
+      res.render("listings/new", { errorMsg });
+      return;
+    }
 
-    // try {
-    // create the listing and store in DB
-    const currentListing = {
-      _id: new mongoose.Types.ObjectId(),
-      user: currentUser._id,
-      listing_name: validatedResults.listing_name,
-      description: validatedResults.description,
-      pick_up_days_and_times: validatedResults.pick_up_days_and_times,
-      category: validatedResults.category,
-      expiry_date: validatedResults.expiry_date,
-      // listing_image_url: req.file.path,
-    };
+    try {
+      // create the listing and store in DB
+      const currentListing = {
+        _id: new mongoose.Types.ObjectId(),
+        user: currentUser._id,
+        listing_name: validatedResults.listing_name,
+        description: validatedResults.description,
+        pick_up_days_and_times: validatedResults.pick_up_days_and_times,
+        category: validatedResults.category,
+        expiry_date: validatedResults.expiry_date,
+        listing_image_url: req.file.path,
+      };
 
-    await listingModel.create(currentListing);
+      await listingModel.create(currentListing);
 
-    // add listing to user (this works)
-    await userModel.findOneAndUpdate(
-      { _id: currentUser._id },
-      {
-        $push: { listings: currentListing._id },
-      }
-    );
-
-    // } catch (err) {
-    //   errorMsg = "Something went wrong. Please try creating the listing again.";
-    //   res.render("listings/new", { errorMsg });
-    //   return;
-    // }
+      // add listing to user (this works)
+      await userModel.findOneAndUpdate(
+        { _id: currentUser._id },
+        {
+          $push: { listings: currentListing._id },
+        }
+      );
+    } catch (err) {
+      errorMsg = "Something went wrong. Please try creating the listing again.";
+      res.render("listings/new", { errorMsg });
+      return;
+    }
 
     // redirect user to previous page before show
     if (req.body.referer) {

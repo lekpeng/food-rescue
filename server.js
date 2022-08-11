@@ -76,25 +76,29 @@ app.get("/login", userController.showLoginForm);
 app.post("/login", userController.login);
 app.get("/signup", userController.showSignupForm);
 app.post("/signup", userController.signup);
-app.delete("/logout", userController.logout);
-app.get("/users/:username", userController.seeProfile);
-app.get("/users", userController.redirectProfile);
+app.delete("/logout", authMiddleware.isAuthenticated, userController.logout);
+app.get("/users/:username", authMiddleware.isAuthenticated, userController.seeProfile);
+app.get("/users", authMiddleware.isAuthenticated, userController.redirectProfile);
 
 // LISTING ROUTES
 
 // app.get("/listings", authMiddleware.isAuthenticated, listingController.index);
 // 1) Index
-app.get("/listings", listingController.indexListings);
+app.get("/listings", authMiddleware.isAuthenticated, listingController.indexListings);
 // 2) New
-app.get("/listings/new", listingController.showNewListingForm); //!! more specific route first so new comes before :listingId
+app.get("/listings/new", authMiddleware.isAuthenticated, listingController.showNewListingForm); //!! more specific route first so new comes before :listingId
 // 3) Show
-app.get("/listings/:listingId", listingController.showListing);
+app.get("/listings/:listingId", authMiddleware.isAuthenticated, listingController.showListing);
 // 4) Create
 app.post("/listings", upload.single("listing_image"), listingController.createListing);
 // 5) Destroy
 app.delete("/listings/:listingId", listingController.deleteListing);
 // 6) Edit
-app.get("/listings/:listingId/edit", listingController.showEditListingForm);
+app.get(
+  "/listings/:listingId/edit",
+  authMiddleware.isAuthenticated,
+  listingController.showEditListingForm
+);
 // 7) Update
 app.put("/listings/:listingId", upload.single("listing_image"), listingController.updateListing);
 

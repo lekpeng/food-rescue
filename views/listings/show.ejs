@@ -12,7 +12,12 @@
           <div id="api-key" style="display: none"><%=apiKey%></div>
           <div id="poster-user-location" style="display: none"><%=listing.user.location%></div>
           <h1><%=listing.listing_name%></h1>
-          <h5>Posted by <%=listing.user.username%> on <%=listing.date_posted.toLocaleString()%></h5>
+          <h5>
+            Posted by <a href="/users/<%=listing.user.username%>"><%=listing.user.username%></a> on
+            <%=listing.date_posted.toLocaleString()%>
+          </h5>
+          <img class="show-listing-img" src="<%=listing.listing_image_url%>" alt="" />
+
           <%if (listing.description){%>
           <p>Description: <%=listing.description%></p>
           <%}%>
