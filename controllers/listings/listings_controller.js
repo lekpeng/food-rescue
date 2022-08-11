@@ -353,12 +353,12 @@ const controller = {
     let errorMsg = false;
     console.log("listingId", listingId);
     console.log("req body", req.body);
-    const validationResults = listingValidators.createListingValidator.validate(req.body);
+    const validationResults = listingValidators.editListingValidator.validate(req.body);
 
     if (validationResults.error) {
       errorMsg = validationResults.error.details[0].message;
-      // res.send(errorMsg);
-      res.render("listings/edit", { errorMsg });
+      res.send(errorMsg);
+      // res.render("listings/edit", { errorMsg });
       return;
     }
 
@@ -367,19 +367,32 @@ const controller = {
     // validation for req.file -> upload in wrong format
     if (req.fileValidationError) {
       errorMsg = req.fileValidationError;
-      res.render("listings/edit", { errorMsg });
+      res.send(errorMsg);
+      // res.render("listings/edit", { errorMsg });
       return;
     }
-
     // update the listing and store in DB
-    const updateListing = {
-      listing_name: validatedResults.listing_name,
-      description: validatedResults.description,
-      pick_up_days_and_times: validatedResults.pick_up_days_and_times,
-      category: validatedResults.category,
-      expiry_date: validatedResults.expiry_date,
-      listing_image_url: req.file.path,
-    };
+    let updateListing;
+    if (req.file) {
+      updateListing = {
+        status: validatedResults.status,
+        listing_name: validatedResults.listing_name,
+        description: validatedResults.description,
+        pick_up_days_and_times: validatedResults.pick_up_days_and_times,
+        category: validatedResults.category,
+        expiry_date: validatedResults.expiry_date,
+        listing_image_url: req.file.path,
+      };
+    } else {
+      updateListing = {
+        status: validatedResults.status,
+        listing_name: validatedResults.listing_name,
+        description: validatedResults.description,
+        pick_up_days_and_times: validatedResults.pick_up_days_and_times,
+        category: validatedResults.category,
+        expiry_date: validatedResults.expiry_date,
+      };
+    }
 
     console.log("updated listing", updateListing);
     const oldListing = await listingModel.findById(listingId).exec();

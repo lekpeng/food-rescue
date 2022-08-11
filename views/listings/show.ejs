@@ -12,6 +12,7 @@
           <div id="api-key" style="display: none"><%=apiKey%></div>
           <div id="poster-user-location" style="display: none"><%=listing.user.location%></div>
           <h1><%=listing.listing_name%></h1>
+          <h5 class="status"><%=listing.status%></h5>
           <h5>
             Posted by <a href="/users/<%=listing.user.username%>"><%=listing.user.username%></a> on
             <%=listing.date_posted.toLocaleString()%>

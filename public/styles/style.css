@@ -72,3 +72,19 @@ footer p {
   height: 50px;
   object-fit: contain;
 }
+
+.status {
+  display: table;
+}
+
+.available {
+  background-color: rgb(0, 211, 0);
+}
+
+.reserved {
+  background-color: yellow;
+}
+
+.taken {
+  background-color: salmon;
+}
