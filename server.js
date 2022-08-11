@@ -7,6 +7,8 @@ const seeding = require("./seeds/seeding");
 const express = require("express");
 const mongoose = require("mongoose");
 const cloudinary = require("cloudinary").v2;
+const socket = require("socket.io");
+
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
 const session = require("express-session");
@@ -17,6 +19,9 @@ const app = express();
 const port = process.env.PORT || 3000;
 const mongoConnStr = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@generalassembly.z7wb6bg.mongodb.net/?retryWrites=true&w=majority`;
 
+const Message = require("./models/messages/messages");
+
+// CONFIGS
 cloudinary.config({
   cloud_name: `${process.env.CLOUDINARY_CLOUD_NAME}`,
   api_key: `${process.env.CLOUDINARY_API_KEY}`,
@@ -46,7 +51,7 @@ const upload = multer({
   },
 });
 
-//MIDDLEWARE
+// SET/USE MIDDLEWARE
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
@@ -60,18 +65,52 @@ app.use(
   })
 );
 
-//ROUTES
+// Server
 
-//Main
+const server = app.listen(port, async () => {
+  try {
+    await mongoose.connect(mongoConnStr, { dbName: "food_rescue" });
+  } catch (err) {
+    console.log(`Failed to connect to DB`);
+    process.exit(1);
+  }
+  console.log(`Food Rescue listening on port ${port}`);
+});
+
+const io = socket(server);
+
+io.on("connection", (socket) => {
+  console.log("made socket connection", socket.id);
+
+  // tODO: find history of message in DB and socket.emit()
+  Message.find().then((result) => {
+    socket.emit("message-history", result);
+  });
+  // Handle chat event
+  socket.on("chat", (data) => {
+    const message = new Message({ handle: data.handle, message: data.message });
+    message.save().then(() => {
+      io.sockets.emit("chat", data);
+    });
+  });
+
+  socket.on("typing", (data) => {
+    socket.broadcast.emit("typing", data);
+  });
+});
+
+// ROUTES
+
+// Main
 app.get("/", authMiddleware.isAuthenticated, (req, res) => {
   res.redirect("/listings");
 });
 
-// SEEDING ROUTES
+// Seed
 app.get("/seed/users", seeding.seedUsers);
 app.get("/seed/listings", seeding.seedListings);
 
-// USER ROUTES
+// User
 app.get("/login", userController.showLoginForm);
 app.post("/login", userController.login);
 app.get("/signup", userController.showSignupForm);
@@ -80,9 +119,7 @@ app.delete("/logout", authMiddleware.isAuthenticated, userController.logout);
 app.get("/users/:username", authMiddleware.isAuthenticated, userController.seeProfile);
 app.get("/users", authMiddleware.isAuthenticated, userController.redirectProfile);
 
-// LISTING ROUTES
-
-// app.get("/listings", authMiddleware.isAuthenticated, listingController.index);
+// Listing
 // 1) Index
 app.get("/listings", authMiddleware.isAuthenticated, listingController.indexListings);
 // 2) New
@@ -102,12 +139,7 @@ app.get(
 // 7) Update
 app.put("/listings/:listingId", upload.single("listing_image"), listingController.updateListing);
 
-app.listen(port, async () => {
-  try {
-    await mongoose.connect(mongoConnStr, { dbName: "food_rescue" });
-  } catch (err) {
-    console.log(`Failed to connect to DB`);
-    process.exit(1);
-  }
-  console.log(`Food Rescue listening on port ${port}`);
+// Chat
+app.get("/chat", (req, res) => {
+  res.render("pages/chat");
 });
