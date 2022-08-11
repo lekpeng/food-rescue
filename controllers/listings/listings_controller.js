@@ -2,9 +2,16 @@ require("dotenv").config({ path: "../../.env" });
 
 const listingModel = require("../../models/listings/listings");
 const userModel = require("../../models/users/users");
+const cloudinary = require("cloudinary").v2;
 const listingValidators = require("../validators/listings");
 const mongoose = require("mongoose");
 const { ObjectId } = require("mongodb");
+
+cloudinary.config({
+  cloud_name: `${process.env.CLOUDINARY_CLOUD_NAME}`,
+  api_key: `${process.env.CLOUDINARY_API_KEY}`,
+  api_secret: `${process.env.CLOUDINARY_API_SECRET}`,
+});
 
 const deg2rad = (deg) => deg * (Math.PI / 180);
 
@@ -192,6 +199,13 @@ const controller = {
   createListing: async (req, res) => {
     console.log("------->Create New Listing<--------");
     console.log("req.file", req.file);
+    console.log("------->Show New Listing Form<--------");
+    const dateObj = new Date();
+    const year = dateObj.getFullYear().toString();
+    const month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
+    const day = ("0" + dateObj.getDate()).slice(-2);
+    const todayDate = `${year}-${month}-${day}`;
+
     // console.log("------->req.file.path", req.file.path);
 
     const currentUser = req.session.currentUser;
@@ -206,7 +220,7 @@ const controller = {
 
     if (validationResults.error) {
       errorMsg = validationResults.error.details[0].message;
-      res.render("listings/new", { errorMsg });
+      res.render("listings/new", { errorMsg, todayDate, referer: req.headers.referer });
       return;
     }
 
@@ -215,7 +229,7 @@ const controller = {
     // validation for req.file -> upload in wrong format
     if (req.fileValidationError) {
       errorMsg = req.fileValidationError;
-      res.render("listings/new", { errorMsg });
+      res.render("listings/new", { errorMsg, todayDate, referer: req.headers.referer });
       return;
     }
 
@@ -243,13 +257,18 @@ const controller = {
       );
     } catch (err) {
       errorMsg = "Something went wrong. Please try creating the listing again.";
-      res.render("listings/new", { errorMsg });
+      res.render("listings/new", { errorMsg, todayDate, referer: req.headers.referer });
       return;
     }
 
     // redirect user to previous page before show
     if (req.body.referer) {
-      res.redirect(req.body.referer);
+      const link = new URL(req.body.referer);
+      if (link.pathname === "/listings/new") {
+        res.redirect("/listings");
+      } else {
+        res.redirect(req.body.referer);
+      }
     } else {
       res.redirect("/");
     }
@@ -267,8 +286,18 @@ const controller = {
       }
     );
 
+    // regex splt by dot and slash
+    const cloudinaryURL = listing.listing_image_url.split(/[./]+/);
+    const cloudinarylistingImgId = `DEV/${cloudinaryURL[cloudinaryURL.indexOf("DEV") + 1]}`;
+    console.log("cloudinarylistingImgId", cloudinarylistingImgId);
+    // remove img from cloudinary
+    await cloudinary.uploader.destroy(cloudinarylistingImgId, (err, res) => {
+      console.log(res, err);
+    });
+
     // delete listing
     await listingModel.findByIdAndDelete(listingId).exec();
+
     // redirect user to previous page before show
     if (req.body.referer) {
       res.redirect(req.body.referer);
@@ -328,32 +357,41 @@ const controller = {
 
     if (validationResults.error) {
       errorMsg = validationResults.error.details[0].message;
-      res.send(errorMsg);
-      // res.render("listings/edit", { errorMsg });
+      // res.send(errorMsg);
+      res.render("listings/edit", { errorMsg });
       return;
     }
 
     const validatedResults = validationResults.value;
 
     // validation for req.file -> upload in wrong format
-    // if (req.fileValidationError) {
-    //   errorMsg = req.fileValidationError;
-    //   res.render("listings/new", { errorMsg });
-    //   return;
-    // }
+    if (req.fileValidationError) {
+      errorMsg = req.fileValidationError;
+      res.render("listings/edit", { errorMsg });
+      return;
+    }
 
-    // try {
-    // create the listing and store in DB
+    // update the listing and store in DB
     const updateListing = {
       listing_name: validatedResults.listing_name,
       description: validatedResults.description,
       pick_up_days_and_times: validatedResults.pick_up_days_and_times,
       category: validatedResults.category,
       expiry_date: validatedResults.expiry_date,
-      // listing_image_url: req.file.path,
+      listing_image_url: req.file.path,
     };
 
     console.log("updated listing", updateListing);
+    const oldListing = await listingModel.findById(listingId).exec();
+    // regex splt by dot and slash
+    const cloudinaryURL = oldListing.listing_image_url.split(/[./]+/);
+    const cloudinarylistingImgId = `DEV/${cloudinaryURL[cloudinaryURL.indexOf("DEV") + 1]}`;
+
+    // remove old img from cloudinary
+    await cloudinary.uploader.destroy(cloudinarylistingImgId, (err, res) => {
+      console.log(res, err);
+    });
+
     await listingModel.findOneAndUpdate({ _id: listingId }, updateListing);
     res.redirect(`/listings/${listingId}`);
   },
