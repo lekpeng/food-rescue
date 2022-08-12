@@ -56,14 +56,14 @@ footer p {
 
 .index-listing-img,
 .profile-listing-img {
-  width: 300px;
-  height: 300px;
+  width: 40vw;
+  height: 40vw;
   object-fit: contain;
 }
 
 .show-listing-img {
-  width: 500px;
-  height: 500px;
+  width: 80vw;
+  height: 80vw;
   object-fit: contain;
 }
 

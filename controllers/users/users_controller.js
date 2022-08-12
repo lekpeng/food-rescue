@@ -143,8 +143,15 @@ const controller = {
     let errorMsg;
     const username = req.params.username;
     const currentUserUsername = req.session.currentUser.username;
-    const allListings = await listingModel.find({}).populate("user").exec();
-    const listings = allListings.filter((listing) => listing.user.username === username);
+    const user = await userModel
+      .findOne({ username: currentUserUsername })
+      .populate("listings")
+      .exec();
+    console.log("user", user);
+    const listings = user.listings;
+    console.log("listings", listings);
+    // const allListings = await listingModel.find({}).populate("user").exec();
+    // const listings = allListings.filter((listing) => listing.user.username === username);
 
     listings.sort((listingA, listingB) => {
       return Number(listingB.date_posted) - Number(listingA.date_posted);
