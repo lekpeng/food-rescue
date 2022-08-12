@@ -11,9 +11,10 @@ const output = document.querySelector("#output");
 const feedback = document.querySelector("#feedback");
 const onlineUsers = document.querySelector("#online-users");
 const inChatUsers = document.querySelector("#in-chat-users");
-
+const chatWindow = document.querySelector("#chat-window");
 // Emit events
 
+console.log("STATUS ONLINE", username.value);
 socket.emit("online", username.value);
 
 btn.addEventListener("click", () => {
@@ -22,6 +23,8 @@ btn.addEventListener("click", () => {
     message: message.value,
     timestamp: new Date(),
   });
+  message.value = "";
+  message.focus();
 });
 
 message.addEventListener("keypress", () => {
@@ -43,6 +46,7 @@ socket.on("chat", (data) => {
     new Date(data.timestamp).toLocaleString("en-GB").substring(0, 17) +
     "</p>" +
     "</div>";
+  chatWindow.scrollTop = chatWindow.scrollHeight;
 });
 
 socket.on("message-history", (usernamesWithMessages) => {

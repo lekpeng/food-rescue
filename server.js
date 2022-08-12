@@ -14,8 +14,10 @@ const multer = require("multer");
 const session = require("express-session");
 const authMiddleware = require("./middlewares/auth_middleware");
 const methodOverride = require("method-override");
-
+const http = require("http");
 const app = express();
+const server = http.createServer(app);
+
 const port = process.env.PORT || 3000;
 const mongoConnStr = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@generalassembly.z7wb6bg.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -69,7 +71,7 @@ app.use(
 
 // Server
 
-const server = app.listen(port, async () => {
+server.listen(port, async () => {
   try {
     await mongoose.connect(mongoConnStr, { dbName: "food_rescue" });
   } catch (err) {
@@ -85,6 +87,15 @@ const onlineUsers = {};
 
 io.on("connection", async (socket) => {
   console.log("made socket connection", socket.id);
+
+  // Handle online event
+  socket.on("online", (username) => {
+    onlineUsers[socket.id] = username;
+    io.sockets.emit("connected", username);
+    io.sockets.emit("update-online-chat", onlineUsers);
+    console.log("ONLINE USERS", onlineUsers);
+  });
+
   const data = await messageModel.find().populate("user").exec();
   const usernamesWithMessages = data.map((individualData) => {
     return {
@@ -100,14 +111,6 @@ io.on("connection", async (socket) => {
     const user = await userModel.findOne({ username: data.username }).exec();
     await messageModel.create({ user: user._id, message: data.message });
     io.sockets.emit("chat", data);
-  });
-
-  // Handle online event
-  socket.on("online", (username) => {
-    onlineUsers[socket.id] = username;
-    io.sockets.emit("connected", username);
-    io.sockets.emit("update-online-chat", onlineUsers);
-    console.log("ONLINE USERS", onlineUsers);
   });
 
   socket.on("disconnect", () => {
