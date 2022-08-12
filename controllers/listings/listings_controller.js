@@ -318,6 +318,13 @@ const controller = {
       return;
     }
 
+    const statusForm = {
+      available: "no",
+      reserved: "no",
+      taken: "no",
+    };
+    statusForm[listing.status] = "yes";
+
     const categoryForm = {
       "rice-and-noodles": "no",
       "bread-and-pastry": "no",
@@ -339,6 +346,7 @@ const controller = {
     res.render("listings/edit", {
       expiryDate,
       categoryForm,
+      statusForm,
       listing,
       errorMsg: null,
     });
