@@ -123,7 +123,7 @@ app.get("/users", authMiddleware.isAuthenticated, userController.redirectProfile
 
 // Listing
 // 1) Index
-app.get("/listings", authMiddleware.isAuthenticated, listingController.indexListings);
+app.get("/listings", listingController.indexListings);
 // 2) New
 app.get("/listings/new", authMiddleware.isAuthenticated, listingController.showNewListingForm); //!! more specific route first so new comes before :listingId
 // 3) Show

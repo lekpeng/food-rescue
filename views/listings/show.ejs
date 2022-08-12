@@ -5,10 +5,10 @@
     <%- include('../partials/nav'); %>
 
     <div class="constrained-full-height" id="page-index-listings">
-      <div class="container">
+      <div class="container pt-5">
         <!-- Listing name -->
         <%- include('../partials/errors'); %> <%if(listing){%>
-        <main class="listing">
+        <main class="listing p-3">
           <div id="api-key" style="display: none"><%=apiKey%></div>
           <div id="poster-user-location" style="display: none"><%=listing.user.location%></div>
           <h1><%=listing.listing_name%></h1>
@@ -17,26 +17,35 @@
             Posted by <a href="/users/<%=listing.user.username%>"><%=listing.user.username%></a> on
             <%=listing.date_posted.toLocaleString()%>
           </h5>
-          <img class="show-listing-img" src="<%=listing.listing_image_url%>" alt="" />
+          <div class="d-flex">
+            <img class="show-listing-img" src="<%=listing.listing_image_url%>" alt="" />
+            <div class="d-flex flex-column justify-content-center ms-5">
+              <%if (listing.description){%>
+              <p>Description: <%=listing.description%></p>
+              <%}%>
+              <p>Pick up days and times: <%=listing.pick_up_days_and_times%></p>
+              <p>Distance away: <%=listing.distance_away%> km</p>
+              <p>Expiry date: <%=listing.expiry_date.toDateString() %></p>
+              <%if(currentUserIsPoster){%>
+              <div>
+                <a href="/listings/<%=listing._id%>/edit" class="btn btn-secondary">Edit Listing</a>
+                <form
+                  method="POST"
+                  style="display: inline-block"
+                  action="/listings/<%= listing._id %>?_method=DELETE"
+                >
+                  <input type="hidden" name="referer" value="<%=referer%>" />
+                  <button type="submit" class="btn btn-danger">Delete Listing</button>
+                </form>
+              </div>
 
-          <%if (listing.description){%>
-          <p>Description: <%=listing.description%></p>
-          <%}%>
-          <p>Pick up days and times: <%=listing.pick_up_days_and_times%></p>
-          <p>Distance away: <%=listing.distance_away%> km</p>
-          <p>Expiry date: <%=listing.expiry_date.toDateString() %></p>
+              <%} else {%>
+              <a href="" class="btn btn-success">Chat</a>
+              <%}%> <%}%>
+            </div>
+          </div>
 
-          <div class="mb-3 text-center" id="map"></div>
-
-          <%if(currentUserIsPoster){%>
-          <a href="/listings/<%=listing._id%>/edit" class="btn btn-secondary">Edit Listing</a>
-          <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
-            <input type="hidden" name="referer" value="<%=referer%>" />
-            <button type="submit" class="btn btn-danger">Delete Listing</button>
-          </form>
-          <%} else {%>
-          <a href="" class="btn btn-success">Chat</a>
-          <%}%> <%}%>
+          <div class="map mt-3 text-center" id="map"></div>
         </main>
       </div>
     </div>

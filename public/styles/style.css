@@ -1,16 +1,60 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: rgb(192, 236, 255);
+}
+
+#error-msgs {
+  background-color: beige;
+}
+
+#page-index-listings {
+  background-color: white;
+}
+
+#logout-button {
+  border: none;
+  background-color: rgb(192, 236, 255);
+}
+
+.sorts-filters {
+  margin-top: 1em;
+  padding: 1em;
+  border: 2px solid black;
+  border-radius: 20px;
+}
+
+#logo {
+  width: 150px;
+}
+
+#logo-small {
+  width: 100px;
+}
+
 p {
   margin-bottom: 0;
 }
 
-.constrained-full-height {
+/* .constrained-full-height {
   min-height: calc(100vh - 54px);
-}
+} */
 
-#map {
+.map {
   height: 50vh;
 }
 
+.map-small {
+  height: 30vh;
+}
+
 footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 100000;
   background-color: lightgray;
 }
 
@@ -34,7 +78,7 @@ footer p {
 }
 
 #nav-bar {
-  padding: 30px 0;
+  padding: 10px 0;
 }
 
 #nav-bar figure {
@@ -47,24 +91,26 @@ footer p {
   border-radius: 20px;
 }
 
-.categories,
+/* .categories,
 .expiry-status,
 .sorts {
   border: solid black;
   padding: 0.2em;
-}
+} */
 
 .index-listing-img,
 .profile-listing-img {
-  width: 40vw;
-  height: 40vw;
+  width: 150px;
+  height: 150px;
   object-fit: contain;
+  border-radius: 10px;
 }
 
 .show-listing-img {
-  width: 80vw;
-  height: 80vw;
+  width: 300px;
+  height: 300px;
   object-fit: contain;
+  border-radius: 10px;
 }
 
 #preview {

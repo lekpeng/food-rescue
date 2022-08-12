@@ -6,109 +6,121 @@
 
     <div class="constrained-full-height" id="page-index-listings">
       <div class="container">
-        <h1>All Listings</h1>
-        <a class="btn btn-primary" href="/listings/new">Create new listing</a>
-        <form method="GET" action="/listings">
-          <div class="sorts">
-            <h6>Sort by:</h6>
-            <div class="form-check form-check-inline">
-              <input
-                class="form-check-input mr-3 <%=formInputs.sort.latest%>"
-                value="latest"
-                type="radio"
-                name="sort"
-                id="latest"
-                checked
-              />
-              <label class="form-check-label" for="latest"> Latest</label>
+        <div class="pt-4 text-end">
+          <h1 class="text-center">All Listings</h1>
+          <a class="btn btn-primary btn-success" href="/listings/new">Create new listing</a>
+        </div>
+        <div class="sorts-filters mb-5">
+          <form method="GET" action="/listings">
+            <div class="sorts">
+              <h6>Sort by:</h6>
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input mr-3 <%=formInputs.sort.latest%>"
+                  value="latest"
+                  type="radio"
+                  name="sort"
+                  id="latest"
+                  checked
+                />
+                <label class="form-check-label" for="latest"> Latest</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input <%=formInputs.sort.nearest%>"
+                  value="nearest"
+                  type="radio"
+                  name="sort"
+                  id="nearest"
+                />
+                <label class="form-check-label" for="nearest"> Nearest </label>
+              </div>
             </div>
-            <div class="form-check form-check-inline">
-              <input
-                class="form-check-input <%=formInputs.sort.nearest%>"
-                value="nearest"
-                type="radio"
-                name="sort"
-                id="nearest"
-              />
-              <label class="form-check-label" for="nearest"> Nearest </label>
+            <div class="mt-3 expiry-status">
+              <h6>Expiry Status:</h6>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input <%=formInputs.expiry["not-expired"]%>"
+                type="checkbox" name="not-expired" id="not-expired" checked />
+                <label class="form-check-label" for="not-expired">Not expired</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input <%=formInputs.expiry["expired"]%>" type="checkbox"
+                name="expired" id="expired" checked />
+                <label class="form-check-label" for="expired">Expired</label>
+              </div>
             </div>
-          </div>
-          <div class="mt-3 expiry-status">
-            <h6>Expiry Status:</h6>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input <%=formInputs.expiry["not-expired"]%>" type="checkbox"
-              name="not-expired" id="not-expired" checked />
-              <label class="form-check-label" for="not-expired">Not expired</label>
+            <div class="mt-3 categories">
+              <h6>Categories:</h6>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input <%=formInputs.categories["rice-and-noodles"]%>"
+                type="checkbox" name="rice-and-noodles" id="rice-and-noodles" checked />
+                <label class="form-check-label" for="rice-and-noodles">Rice and noodles</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input <%=formInputs.categories["bread-and-pastry"]%>"
+                type="checkbox" name="bread-and-pastry" id="bread-and-pastry" checked />
+                <label class="form-check-label" for="bread-and-pastry">Bread and pastry</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="snacks" id="snacks" checked />
+                <label class="form-check-label" for="snacks">Snacks</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input <%=formInputs.categories["fresh-produce"]%>"
+                type="checkbox" name="fresh-produce" id="fresh-produce" checked />
+                <label class="form-check-label" for="fresh-produce">Fresh produce</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input <%=formInputs.categories["condiments"]%>"
+                type="checkbox" name="condiments" id="condiments" checked />
+                <label class="form-check-label" for="condiments">Condiments</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input <%=formInputs.categories["canned-food"]%>"
+                type="checkbox" name="canned-food" id="canned-food" checked />
+                <label class="form-check-label" for="canned-food">Canned food</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input <%=formInputs.categories["beverage"]%>"
+                type="checkbox" name="beverage" id="beverage" checked />
+                <label class="form-check-label" for="beverage">Beverage</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input
+                <%=formInputs.categories["chilled-and-frozen-food"]%>" type="checkbox"
+                name="chilled-and-frozen-food" id="chilled-and-frozen-food" checked />
+                <label class="form-check-label" for="chilled-and-frozen-food"
+                  >Chilled and frozen food</label
+                >
+              </div>
             </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input <%=formInputs.expiry["expired"]%>" type="checkbox"
-              name="expired" id="expired" checked />
-              <label class="form-check-label" for="expired">Expired</label>
-            </div>
-          </div>
-          <div class="mt-3 categories">
-            <h6>Categories:</h6>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input <%=formInputs.categories["rice-and-noodles"]%>"
-              type="checkbox" name="rice-and-noodles" id="rice-and-noodles" checked />
-              <label class="form-check-label" for="rice-and-noodles">Rice and noodles</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input <%=formInputs.categories["bread-and-pastry"]%>"
-              type="checkbox" name="bread-and-pastry" id="bread-and-pastry" checked />
-              <label class="form-check-label" for="bread-and-pastry">Bread and pastry</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" name="snacks" id="snacks" checked />
-              <label class="form-check-label" for="snacks">Snacks</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input <%=formInputs.categories["fresh-produce"]%>"
-              type="checkbox" name="fresh-produce" id="fresh-produce" checked />
-              <label class="form-check-label" for="fresh-produce">Fresh produce</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input <%=formInputs.categories["condiments"]%>"
-              type="checkbox" name="condiments" id="condiments" checked />
-              <label class="form-check-label" for="condiments">Condiments</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input <%=formInputs.categories["canned-food"]%>"
-              type="checkbox" name="canned-food" id="canned-food" checked />
-              <label class="form-check-label" for="canned-food">Canned food</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input <%=formInputs.categories["beverage"]%>" type="checkbox"
-              name="beverage" id="beverage" checked />
-              <label class="form-check-label" for="beverage">Beverage</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input <%=formInputs.categories["chilled-and-frozen-food"]%>"
-              type="checkbox" name="chilled-and-frozen-food" id="chilled-and-frozen-food" checked />
-              <label class="form-check-label" for="chilled-and-frozen-food"
-                >Chilled and frozen food</label
-              >
-            </div>
-          </div>
 
-          <input class="mt-3 mb-3 btn btn-primary" type="submit" value="Apply" />
-        </form>
+            <input class="mt-3 mb-3 btn btn-primary" type="submit" value="Apply" />
+          </form>
+        </div>
         <main class="listings">
           <!-- filter and display listings here -->
           <%listings.forEach(listing => {%>
 
-          <div class="mb-5 listing">
+          <div class="mb-5 p-3 listing">
             <h4><%=listing.listing_name%></h4>
             <h5>
               Posted by
               <a href="/users/<%=listing.user.username%>"><%=listing.user.username%></a> on
               <%=listing.date_posted.toLocaleString()%>
             </h5>
-            <img class="index-listing-img" src="<%=listing.listing_image_url%>" alt="" />
-            <p>Category: <%=listing.category%></p>
-            <p>Distance away: <%=listing.distance_away%> km</p>
-            <p>Expiry date: <%=listing.expiry_date.toDateString() %></p>
-            <a class="btn btn-success" href="/listings/<%= listing._id %>">View</a>
+            <div class="d-flex">
+              <img class="index-listing-img" src="<%=listing.listing_image_url%>" alt="" />
+
+              <div class="d-flex flex-column justify-content-center ms-5">
+                <p>Category: <%=listing.category%></p>
+                <p>Distance away: <%=listing.distance_away%> km</p>
+                <p>Expiry date: <%=listing.expiry_date.toDateString() %></p>
+                <div>
+                  <a class="btn btn-success" href="/listings/<%= listing._id %>">View</a>
+                </div>
+              </div>
+            </div>
           </div>
 
           <%})%>

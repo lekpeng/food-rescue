@@ -7,23 +7,29 @@
     <div class="constrained-full-height" id="page-index-listings">
       <div class="container">
         <%- include('../partials/errors'); %> <%if (!errorMsg){%>
-        <h1><%=username%>'s Listings</h1>
+        <h1 class="pt-4"><%=username%>'s Listings</h1>
         <%if(isProfileOwner){%>
-        <a class="btn btn-primary" href="/listings/new">Create new listing</a>
+        <a class="btn btn-success" href="/listings/new">Create new listing</a>
         <%} }%>
         <main class="listings">
           <!-- filter and display listings here -->
           <%listings.forEach(listing => {%>
 
-          <div class="mb-5 listing">
+          <div class="mb-5 p-3 listing">
             <h4><%=listing.listing_name%></h4>
             <h5 class="status"><%=listing.status%></h5>
             <h5>Posted on <%=listing.date_posted.toLocaleString()%></h5>
-            <img class="profile-listing-img" src="<%=listing.listing_image_url%>" alt="" />
-            <p>Category: <%=listing.category%></p>
-            <p>Distance away: <%=listing.distance_away%> km</p>
-            <p>Expiry date: <%=listing.expiry_date.toDateString() %></p>
-            <a class="btn btn-success" href="/listings/<%= listing._id %>">View</a>
+            <div class="d-flex">
+              <img class="profile-listing-img" src="<%=listing.listing_image_url%>" alt="" />
+              <div class="d-flex flex-column justify-content-center ms-5">
+                <p>Category: <%=listing.category%></p>
+                <p>Distance away: <%=listing.distance_away%> km</p>
+                <p>Expiry date: <%=listing.expiry_date.toDateString() %></p>
+                <div>
+                  <a class="btn btn-success" href="/listings/<%= listing._id %>">View</a>
+                </div>
+              </div>
+            </div>
           </div>
 
           <%})%>

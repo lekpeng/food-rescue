@@ -4,13 +4,13 @@
   <body>
     <div class="constrained-full-height" id="page-signup">
       <div class="container">
-        <div class="text-center pt-5">
-          <img src="/assets/logo.png" alt="" /><br /><br />
-          <h1>Join us at Food Rescue!</h1>
+        <div class="text-center pt-3">
+          <img id="logo" src="/assets/logo.png" alt="" /><br /><br />
+          <h2>Join us!</h2>
           <p style="font-style: italic">You too can play a part in reducing food waste.</p>
         </div>
 
-        <form id="signup-form" class="mt-5" method="POST" action="/signup">
+        <form id="signup-form" class="mt-2" method="POST" action="/signup">
           <%- include('../partials/errors'); %>
 
           <div class="mb-3 justify-center">
@@ -70,7 +70,7 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                  <div class="mb-3 text-center" id="map"></div>
+                  <div class="map mb-3 text-center" id="map"></div>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" onClick="getLocationLeaflet()">
