@@ -6,9 +6,9 @@ const messageSchema = new mongoose.Schema({
   //     type: Schema.Types.ObjectId,
   //     ref: "Listing",
   //   },
-  handle: {
-    type: String,
-    required: true,
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
   },
 
   message: {

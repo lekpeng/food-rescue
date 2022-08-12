@@ -19,7 +19,9 @@ const app = express();
 const port = process.env.PORT || 3000;
 const mongoConnStr = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@generalassembly.z7wb6bg.mongodb.net/?retryWrites=true&w=majority`;
 
-const Message = require("./models/messages/messages");
+// const Message = require("./models/messages/messages");
+const messageModel = require("./models/messages/messages");
+const userModel = require("./models/users/users");
 
 // CONFIGS
 cloudinary.config({
@@ -79,24 +81,27 @@ const server = app.listen(port, async () => {
 
 const io = socket(server);
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
   console.log("made socket connection", socket.id);
 
   // tODO: find history of message in DB and socket.emit()
-  Message.find().then((result) => {
-    socket.emit("message-history", result);
+  const data = await messageModel.find().populate("user").exec();
+  console.log("DATA", data);
+  const usernamesWithMessages = data.map((individualData) => {
+    return { username: individualData.user.username, message: individualData.message };
   });
+  socket.emit("message-history", usernamesWithMessages);
+
   // Handle chat event
-  socket.on("chat", (data) => {
-    const message = new Message({ handle: data.handle, message: data.message });
-    message.save().then(() => {
-      io.sockets.emit("chat", data);
-    });
+  socket.on("chat", async (data) => {
+    const user = await userModel.findOne({ username: data.username }).exec();
+    await messageModel.create({ user: user._id, message: data.message });
+    io.sockets.emit("chat", data);
   });
 
-  socket.on("typing", (data) => {
-    socket.broadcast.emit("typing", data);
-  });
+  // socket.on("typing", (data) => {
+  //   socket.broadcast.emit("typing", data);
+  // });
 });
 
 // ROUTES
@@ -140,6 +145,8 @@ app.get(
 app.put("/listings/:listingId", upload.single("listing_image"), listingController.updateListing);
 
 // Chat
-app.get("/chat", (req, res) => {
-  res.render("pages/chat");
+app.get("/chat", authMiddleware.isAuthenticated, (req, res) => {
+  res.render("pages/chat", {
+    username: req.session.currentUser.username,
+  });
 });
