@@ -16,16 +16,35 @@
   </head>
   <body>
     <%- include('../partials/nav'); %>
+    <div class="container">
+      <div class="d-flex">
+        <div id="info-box">
+          <h3>In chat users</h3>
+          <ul id="in-chat-users"></ul>
 
-    <div id="chat">
-      <div id="chat-window">
-        <div id="output"></div>
-        <div id="feedback"></div>
+          <h3>Activity Log</h3>
+          <ul id="online-users"></ul>
+        </div>
+
+        <div id="chat">
+          <div id="chat-window">
+            <div id="output"></div>
+            <div id="feedback"></div>
+          </div>
+          <input
+            type="hidden"
+            id="username"
+            type="text"
+            value="<%=username%>"
+            placeholder="Username"
+            disabled
+          />
+          <input id="message" type="text" placeholder="Message" required />
+          <button id="send">Send</button>
+        </div>
       </div>
-      <input id="username" type="text" value="<%=username%>" placeholder="Username" disabled />
-      <input id="message" type="text" placeholder="Message" />
-      <button id="send">Send</button>
     </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.js"></script>
     <script src="/scripts/chat.js"></script>
   </body>
