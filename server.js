@@ -83,10 +83,7 @@ const io = socket(server);
 
 io.on("connection", async (socket) => {
   console.log("made socket connection", socket.id);
-
-  // tODO: find history of message in DB and socket.emit()
   const data = await messageModel.find().populate("user").exec();
-  console.log("DATA", data);
   const usernamesWithMessages = data.map((individualData) => {
     return { username: individualData.user.username, message: individualData.message };
   });
@@ -150,3 +147,5 @@ app.get("/chat", authMiddleware.isAuthenticated, (req, res) => {
     username: req.session.currentUser.username,
   });
 });
+
+// Chats (Direct message)
