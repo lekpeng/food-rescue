@@ -7,7 +7,7 @@ const message = document.querySelector("#message");
 const username = document.querySelector("#username");
 const btn = document.querySelector("#send");
 const output = document.querySelector("#output");
-// const feedback = document.querySelector("#feedback");
+const feedback = document.querySelector("#feedback");
 
 // Emit events
 btn.addEventListener("click", () => {
@@ -17,13 +17,13 @@ btn.addEventListener("click", () => {
   });
 });
 
-// message.addEventListener("keypress", () => {
-//   socket.emit("typing", handle.value);
-// });
+message.addEventListener("keypress", () => {
+  socket.emit("typing", username.value);
+});
 
 // Listen for events
 socket.on("chat", (data) => {
-  // feedback.innerHTML = "";
+  feedback.innerHTML = "";
   output.innerHTML += "<p><strong>" + data.username + ": </strong>" + data.message + "</p>";
 });
 
@@ -36,6 +36,6 @@ socket.on("message-history", (usernamesWithMessages) => {
   }
 });
 
-// socket.on("typing", (data) => {
-//   feedback.innerHTML = "<p><em>" + data + " is typing a message...</em></p>";
-// });
+socket.on("typing", (data) => {
+  feedback.innerHTML = "<p><em>" + data + " is typing a message...</em></p>";
+});

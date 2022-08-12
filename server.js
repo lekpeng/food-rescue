@@ -99,9 +99,9 @@ io.on("connection", async (socket) => {
     io.sockets.emit("chat", data);
   });
 
-  // socket.on("typing", (data) => {
-  //   socket.broadcast.emit("typing", data);
-  // });
+  socket.on("typing", (data) => {
+    socket.broadcast.emit("typing", data);
+  });
 });
 
 // ROUTES
