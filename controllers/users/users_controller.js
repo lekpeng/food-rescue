@@ -141,22 +141,37 @@ const controller = {
 
   seeProfile: async (req, res) => {
     let errorMsg;
+    let listings = [];
     const username = req.params.username;
     const currentUserUsername = req.session.currentUser.username;
-    const user = await userModel.findOne({ username }).populate("listings").exec();
-    console.log("user", user);
-    const listings = user.listings;
-    console.log("listings", listings);
-    // const allListings = await listingModel.find({}).populate("user").exec();
-    // const listings = allListings.filter((listing) => listing.user.username === username);
 
-    listings.sort((listingA, listingB) => {
-      return Number(listingB.date_posted) - Number(listingA.date_posted);
-    });
+    try {
+      const user = await userModel.findOne({ username }).populate("listings").exec();
+      console.log("user", user);
+      listings = user.listings;
+      console.log("listings", listings);
+      // const allListings = await listingModel.find({}).populate("user").exec();
+      // const listings = allListings.filter((listing) => listing.user.username === username);
+
+      listings.sort((listingA, listingB) => {
+        return Number(listingB.date_posted) - Number(listingA.date_posted);
+      });
+    } catch (err) {
+      errorMsg = "User not found!";
+      listings = [];
+      res.render("pages/profile", {
+        listings,
+        username,
+        errorMsg,
+        isProfileOwner: username === currentUserUsername,
+      });
+      return;
+    }
 
     if (!listings.length) {
-      errorMsg = "User not found!";
+      errorMsg = "This user has no listings";
     }
+
     res.render("pages/profile", {
       listings,
       username,

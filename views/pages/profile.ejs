@@ -4,15 +4,16 @@
   <body>
     <%- include('../partials/nav'); %>
 
-    <div class="constrained-full-height" id="page-index-listings">
+    <div class="constrained-full-height" id="page-profile">
       <div class="container">
         <%- include('../partials/errors'); %> <%if (!errorMsg){%>
         <h1 class="pt-4"><%=username%>'s Listings</h1>
         <%if(isProfileOwner){%>
         <a class="btn btn-success" href="/listings/new">Create new listing</a>
-        <%} }%>
+        <%} }%> <%if (listings.length){%>
         <main class="listings">
           <!-- filter and display listings here -->
+
           <%listings.forEach(listing => {%>
 
           <div class="mb-5 p-3 listing">
@@ -34,6 +35,7 @@
 
           <%})%>
         </main>
+        <%} %>
       </div>
     </div>
     <%- include('../partials/footer'); %>
