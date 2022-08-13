@@ -27,8 +27,15 @@ btn.addEventListener("click", () => {
   message.focus();
 });
 
-message.addEventListener("keypress", () => {
-  socket.emit("typing", username.value);
+message.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    // Cancel the default action, if needed
+    e.preventDefault();
+    // Trigger the button element with a click
+    btn.click();
+  } else {
+    socket.emit("typing", username.value);
+  }
 });
 
 // Listen for events
