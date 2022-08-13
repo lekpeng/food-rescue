@@ -19,13 +19,13 @@
           <div class="mb-5 p-3 listing">
             <h4><%=listing.listing_name%></h4>
             <h5 class="status"><%=listing.status%></h5>
-            <h5>Posted on <%=listing.date_posted.toLocaleString("en-GB")%></h5>
+            <h5>Posted on <%=new Date(listing.date_posted).toLocaleString('en-SG')%></h5>
             <div class="d-flex">
               <img class="profile-listing-img" src="<%=listing.listing_image_url%>" alt="" />
               <div class="d-flex flex-column justify-content-center ms-5">
                 <p>Category: <%=listing.category%></p>
                 <p>Distance away: <%=listing.distance_away%> km</p>
-                <p>Expiry date: <%=listing.expiry_date.toDateString("en-GB") %></p>
+                <p>Expiry date: <%=listing.expiry_date.toLocaleDateString('en-SG') %></p>
                 <div>
                   <a class="btn btn-success" href="/listings/<%= listing._id %>">View</a>
                 </div>

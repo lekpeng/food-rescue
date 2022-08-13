@@ -106,8 +106,8 @@
             <h4><%=listing.listing_name%></h4>
             <h5>
               Posted by
-              <a href="/users/<%=listing.user.username%>"><%=listing.user.username%></a> on
-              <%=listing.date_posted.toLocaleString("en-GB")%>
+              <a href="/users/<%=listing.user.username%>"><%=listing.user.username%></a> on <%=new
+              Date(listing.date_posted).toLocaleString('en-SG')%>
             </h5>
             <div class="d-flex">
               <img class="index-listing-img" src="<%=listing.listing_image_url%>" alt="" />
@@ -115,7 +115,7 @@
               <div class="d-flex flex-column justify-content-center ms-5">
                 <p>Category: <%=listing.category%></p>
                 <p>Distance away: <%=listing.distance_away%> km</p>
-                <p>Expiry date: <%=listing.expiry_date.toDateString() %></p>
+                <p>Expiry date: <%=listing.expiry_date.toLocaleDateString('en-SG') %></p>
                 <div>
                   <a class="btn btn-success" href="/listings/<%= listing._id %>">View</a>
                 </div>

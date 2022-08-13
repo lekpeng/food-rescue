@@ -43,7 +43,7 @@ socket.on("chat", (data) => {
     data.message +
     "</p>" +
     "<p id='chat-date'>" +
-    new Date(data.timestamp).toLocaleString("en-GB").substring(0, 17) +
+    new Date(data.timestamp).toLocaleString("en-UK").substring(0, 17) +
     "</p>" +
     "</div>";
   chatWindow.scrollTop = chatWindow.scrollHeight;

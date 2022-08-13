@@ -15,7 +15,7 @@
           <h5 class="status"><%=listing.status%></h5>
           <h5>
             Posted by <a href="/users/<%=listing.user.username%>"><%=listing.user.username%></a> on
-            <%=listing.date_posted.toLocaleString("en-GB")%>
+            <%=new Date(listing.date_posted).toLocaleString('en-SG')%>
           </h5>
           <div class="d-flex">
             <img class="show-listing-img" src="<%=listing.listing_image_url%>" alt="" />
@@ -25,7 +25,7 @@
               <%}%>
               <p>Pick up days and times: <%=listing.pick_up_days_and_times%></p>
               <p>Distance away: <%=listing.distance_away%> km</p>
-              <p>Expiry date: <%=listing.expiry_date.toDateString() %></p>
+              <p>Expiry date: <%=listing.expiry_date.toLocaleDateString('en-SG') %></p>
               <%if(currentUserIsPoster){%>
               <div>
                 <a href="/listings/<%=listing._id%>/edit" class="btn btn-secondary">Edit Listing</a>
