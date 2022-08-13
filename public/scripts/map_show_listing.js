@@ -1,7 +1,8 @@
 const rawLocation = document.querySelector("#poster-user-location").innerText;
 const apiKey = document.querySelector("#api-key").innerText;
 
-const showLocation = (rawlatlng) => {
+const showLocation = async (rawlatlng) => {
+  console.log("SHOW LOCATION");
   const [lat, lng] = rawlatlng.split(",").map((string) => Number(string));
   const map = new L.Map("map").setView(new L.LatLng(lat, lng), 12);
 
@@ -16,7 +17,7 @@ const showLocation = (rawlatlng) => {
     apikey: apiKey, // replace with your api key - https://developers.arcgis.com
   });
 
-  geocodeService
+  const geoCodes = await geocodeService
     .reverse()
     .latlng([lat, lng])
     .run(function (error, result) {
@@ -24,9 +25,13 @@ const showLocation = (rawlatlng) => {
         console.log("map pop up error");
         return;
       }
-      console.log("NO ERRRO");
+      console.log("NO ERROR");
 
       L.marker(result.latlng).addTo(map).bindPopup(result.address.Match_addr).openPopup();
+      const leafletPopup = document.querySelector(".leaflet-popup-content");
+      const address = leafletPopup.innerText;
+
+      leafletPopup.innerHTML = `<a href='https://www.google.com/maps/dir/?api=1&destination=${rawLocation}' target='_blank' rel='noopener noreferrer'>${address}</a>`;
     });
 };
 
