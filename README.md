@@ -42,14 +42,14 @@ https://food-rescue-proj.herokuapp.com/
 |          | POST      | Create     | /signup                   | Create user after successful sign up                  |
 |          | GET       | New        | /login                    | Show form to login by prompting user to log in        |
 |          | POST      | Create     | /login                    | Create session after successful login                 |
-|          | DELETE    | Destroy    | /logout                   | Destroys session when user logs out                   |
+|          | DELETE    | Destroy    | /logout                   | Destroy session when user logs out                    |
 |          | GET       | Show       | /users/:username          | Show user's profile (listings)                        |
 | LISTINGS | GET       | Index      | /listings                 | Filter and view listings                              |
 |          | GET       | Show       | /listings/:listingId      | Show info about listing                               |
 |          | GET       | New        | /listings/new             | Show form to create listing                           |
-|          | POST      | Create     | /listings                 | Creates listing                                       |
+|          | POST      | Create     | /listings                 | Create listing                                        |
 |          | GET       | Edit       | /listings/:listingId/edit | Show form to edit listing                             |
-|          | PUT       | Update     | /listings/:listingId      | Edits listing                                         |
+|          | PUT       | Update     | /listings/:listingId      | Update listing with the edits                         |
 |          | DELETE    | Destroy    | /listings/:listingId      | Destroy listing                                       |
 
 
