@@ -1,5 +1,4 @@
 // Make connection
-// http://localhost:3000/
 const socket = io.connect();
 
 // Query DOM
