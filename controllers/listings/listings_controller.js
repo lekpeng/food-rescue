@@ -198,16 +198,11 @@ const controller = {
 
   createListing: async (req, res) => {
     console.log("------->Create New Listing<--------");
-    console.log("req.file", req.file);
-    console.log("------->Show New Listing Form<--------");
     const dateObj = new Date();
     const year = dateObj.getFullYear().toString();
     const month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
     const day = ("0" + dateObj.getDate()).slice(-2);
     const todayDate = `${year}-${month}-${day}`;
-
-    // console.log("------->req.file.path", req.file.path);
-
     const currentUser = req.session.currentUser;
 
     // validation for req.body
@@ -215,7 +210,6 @@ const controller = {
 
     const stuffToValidate = { ...req.body };
     delete stuffToValidate["referer"];
-    console.log("stuff to validate", stuffToValidate);
     const validationResults = listingValidators.createListingValidator.validate(stuffToValidate);
 
     if (validationResults.error) {

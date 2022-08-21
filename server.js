@@ -120,6 +120,6 @@ app.put("/listings/:listingId", upload.single("listing_image"), listingControlle
 
 // Chat
 // const io = chatController(server);
-app.get("/chats", authMiddleware.isAuthenticated, chatController(server).showChat);
+app.get("/chats/:chatId", authMiddleware.isAuthenticated, chatController(server).showChat);
 
 // Chats (Direct message)
