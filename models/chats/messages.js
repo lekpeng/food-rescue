@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const directmessageSchema = new mongoose.Schema({
+const messageSchema = new mongoose.Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -18,6 +18,6 @@ const directmessageSchema = new mongoose.Schema({
   },
 });
 
-const Directmessage = mongoose.model("Directmessage", directmessageSchema);
+const Message = mongoose.model("Message", messageSchema);
 
-module.exports = Directmessage;
+module.exports = Message;

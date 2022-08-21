@@ -9,7 +9,8 @@ body {
   background-color: beige;
 } */
 
-#page-index-listings {
+#page-index-listings,
+#page-index-chats {
   background-color: white;
 }
 
@@ -88,6 +89,12 @@ footer p {
 .listing {
   padding: 0.5em;
   background-color: lightskyblue;
+  border-radius: 20px;
+}
+
+.chat {
+  padding: 0.5em;
+  background-color: lightpink;
   border-radius: 20px;
 }
 

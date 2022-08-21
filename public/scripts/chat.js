@@ -8,8 +8,6 @@ const username = document.querySelector("#username");
 const btn = document.querySelector("#send");
 const output = document.querySelector("#output");
 const feedback = document.querySelector("#feedback");
-const onlineUsers = document.querySelector("#online-users");
-const inChatUsers = document.querySelector("#in-chat-users");
 const chatWindow = document.querySelector("#chat-window");
 // Emit events
 

@@ -20,7 +20,7 @@ const chatSchema = new mongoose.Schema({
   messages: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Directmessage",
+      ref: "Message",
     },
   ],
 });
