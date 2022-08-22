@@ -79,18 +79,48 @@ const controller = (server) => {
       // TODO: validation to makes sure only authorised people can view the chat
       const chatId = req.params.chatId;
 
+      // validate object ID (check if it's 24 digit hex something)
+      if (!ObjectId.isValid(chatId)) {
+        res.render("listings/show", {
+          errorMsg: "Chat not found",
+          listing: null,
+        });
+        return;
+      }
+
+      // validate authorised to view chat
+      const currentUser = req.session.currentUser;
+
       const chat = await chatModel
         .findById(chatId)
         .populate("listing")
         .populate("listing_owner_user")
+        .populate("listing_requester_user")
         .exec();
 
-      res.render("chats/show", {
-        listing_name: chat.listing.listing_name,
-        listing_owner_user: chat.listing_owner_user.username,
-        username: req.session.currentUser.username,
-        chatId,
-      });
+      if (!chat) {
+        res.render("listings/show", {
+          errorMsg: "Chat not found",
+          listing: null,
+        });
+      } else {
+        if (
+          currentUser.username === chat.listing_owner_user.username ||
+          currentUser.username === chat.listing_requester_user.username
+        ) {
+          res.render("chats/show", {
+            listing_name: chat.listing.listing_name,
+            listing_owner_user: chat.listing_owner_user.username,
+            username: currentUser.username,
+            chatId,
+          });
+        } else {
+          res.render("listings/show", {
+            errorMsg: "Chat not found",
+            listing: null,
+          });
+        }
+      }
     },
 
     createChat: async (req, res) => {
