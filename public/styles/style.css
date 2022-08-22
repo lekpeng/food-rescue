@@ -113,6 +113,13 @@ footer p {
   border-radius: 10px;
 }
 
+.listing-details {
+  background-color: white;
+  border-radius: 10px;
+  max-width: 600px;
+  margin: 30px auto;
+}
+
 .show-listing-img {
   width: 300px;
   height: 300px;

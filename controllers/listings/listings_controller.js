@@ -64,7 +64,6 @@ const controller = {
       };
       // let mongooseSortFilter = { date_posted: 1 };
       const userQuery = req.query;
-      console.log("userQuery", userQuery);
       const categoryFilter = [];
       const expiryFilter = {};
 
@@ -83,7 +82,6 @@ const controller = {
           categoryFilter.push(key);
         }
       }
-      console.log("!!!expiryFilter", expiryFilter);
 
       // update form inputs if not default
       if (categoryFilter.length) {
@@ -283,7 +281,6 @@ const controller = {
     // regex splt by dot and slash
     const cloudinaryURL = listing.listing_image_url.split(/[./]+/);
     const cloudinarylistingImgId = `DEV/${cloudinaryURL[cloudinaryURL.indexOf("DEV") + 1]}`;
-    console.log("cloudinarylistingImgId", cloudinarylistingImgId);
     // remove img from cloudinary
     await cloudinary.uploader.destroy(cloudinarylistingImgId, (err, res) => {
       console.log(res, err);
@@ -347,14 +344,12 @@ const controller = {
   },
 
   updateListing: async (req, res) => {
-    console.log("-------> update listing <----------");
+    console.log("-------> Update listing <----------");
     const currentUser = req.session.currentUser;
     const listingId = req.params.listingId;
 
     // validation for req.body
     let errorMsg = false;
-    console.log("listingId", listingId);
-    console.log("req body", req.body);
     const validationResults = listingValidators.editListingValidator.validate(req.body);
 
     if (validationResults.error) {
@@ -396,7 +391,6 @@ const controller = {
       };
     }
 
-    console.log("updated listing", updateListing);
     const oldListing = await listingModel.findById(listingId).exec();
     // regex splt by dot and slash
     const cloudinaryURL = oldListing.listing_image_url.split(/[./]+/);

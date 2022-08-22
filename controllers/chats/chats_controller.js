@@ -8,8 +8,6 @@ const controller = (server) => {
   const socket = require("socket.io");
   const io = socket(server);
   io.on("connection", async (socket) => {
-    console.log("made socket connection", socket.id);
-
     // Handle online event
     socket.on("online", async (chatId, username) => {
       socket.join(chatId);
@@ -20,8 +18,6 @@ const controller = (server) => {
         .findById(chatId)
         .populate({ path: "messages", populate: "user" })
         .exec();
-
-      console.log("chat", chat);
 
       const messages = chat.messages.map((msg) => {
         return {
@@ -38,8 +34,8 @@ const controller = (server) => {
       // TODO: SAVING MESSAGE IN DB
       const user = await userModel.findOne({ username: data.username }).exec();
       const message = await messageModel.create({ user: user._id, message: data.message });
-
-      await chatModel.findOneAndUpdate(
+      // return value is unupdated chat
+      const chat = await chatModel.findOneAndUpdate(
         { _id: chatId },
         {
           $push: { messages: message._id },
@@ -47,6 +43,23 @@ const controller = (server) => {
       );
 
       io.sockets.to(chatId).emit("chat", data);
+
+      // only do this for first message
+      if (chat.messages.length === 0) {
+        await userModel.findOneAndUpdate(
+          { _id: chat.listing_owner_user },
+          {
+            $push: { chats: chatId },
+          }
+        );
+
+        await userModel.findOneAndUpdate(
+          { _id: chat.listing_requester_user },
+          {
+            $push: { chats: chatId },
+          }
+        );
+      }
     });
 
     // Handle typing event
@@ -88,9 +101,8 @@ const controller = (server) => {
         return;
       }
 
-      // validate authorised to view chat
+      // validate authorisation to view chat
       const currentUser = req.session.currentUser;
-
       const chat = await chatModel
         .findById(chatId)
         .populate("listing")
@@ -109,8 +121,9 @@ const controller = (server) => {
           currentUser.username === chat.listing_requester_user.username
         ) {
           res.render("chats/show", {
-            listing_name: chat.listing.listing_name,
-            listing_owner_user: chat.listing_owner_user.username,
+            listing: chat.listing,
+            listing_owner_username: chat.listing_owner_user.username,
+            listing_requester_username: chat.listing_requester_user.username,
             username: currentUser.username,
             chatId,
           });
@@ -131,7 +144,6 @@ const controller = (server) => {
       // if so, just redirect to that chat.
 
       const user = await userModel.findById(currentUser._id).populate("chats");
-      console.log("user", user);
       const existingChat = user.chats.find((chat) => {
         return chat.listing.toString() === listingId;
       });
@@ -154,19 +166,19 @@ const controller = (server) => {
 
       await chatModel.create(currentChat);
 
-      await userModel.findOneAndUpdate(
-        { _id: currentUser._id },
-        {
-          $push: { chats: currentChat._id },
-        }
-      );
+      // await userModel.findOneAndUpdate(
+      //   { _id: currentUser._id },
+      //   {
+      //     $push: { chats: currentChat._id },
+      //   }
+      // );
 
-      await userModel.findOneAndUpdate(
-        { _id: req.body.listing_owner_user_id },
-        {
-          $push: { chats: currentChat._id },
-        }
-      );
+      // await userModel.findOneAndUpdate(
+      //   { _id: req.body.listing_owner_user_id },
+      //   {
+      //     $push: { chats: currentChat._id },
+      //   }
+      // );
 
       res.redirect(`/chats/${chatId}`);
     },

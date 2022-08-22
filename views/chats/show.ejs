@@ -21,8 +21,21 @@
     <%- include('../partials/nav'); %>
     <div class="container">
       <!-- <div class="d-flex"> -->
-      <div id="listing-details">
-        <h1>Chat with <%=listing_owner_user%> for <%=listing_name%></h1>
+      <div class="listing-details d-flex justify-content-center">
+        <img class="index-listing-img" src="<%=listing.listing_image_url%>" />
+        <div class="mr-5 d-flex align-items-center">
+          <%if (username === listing_owner_username){%>
+          <h3>
+            Chat with <%=listing_requester_username%> for
+            <a href="/listings/<%=listing._id%>"><%=listing.listing_name%></a>
+          </h3>
+          <%} else {%>
+          <h3>
+            Chat with <%=listing_owner_username%> for
+            <a href="/listings/<%=listing._id%>"><%=listing.listing_name%></a>
+          </h3>
+          <%} %>
+        </div>
       </div>
       <div id="chat">
         <div id="chat-window">

@@ -119,8 +119,9 @@ app.get(
 app.put("/listings/:listingId", upload.single("listing_image"), listingController.updateListing);
 
 // Chat
+// 1) Index
 app.get("/chats", authMiddleware.isAuthenticated, chatController(server).indexChats);
-
+// 2) Create
 app.post("/chats", authMiddleware.isAuthenticated, chatController(server).createChat);
-
+// 3) Show
 app.get("/chats/:chatId", authMiddleware.isAuthenticated, chatController(server).showChat);
