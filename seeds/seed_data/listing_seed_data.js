@@ -5,7 +5,7 @@ const listings = [
     category: "beverage",
     expiry_date: new Date("2022-09-25"),
     listing_image_url:
-      "https://res.cloudinary.com/food-rescue/image/upload/v1660202434/DEV/COKECARTON_1024x1024_2x_oica2y.png",
+      "https://res.cloudinary.com/food-rescue/image/upload/v1661185211/DEV/0004900005846_B_ghzykn.jpg",
   },
   {
     listing_name: "walls ice cream",
@@ -29,7 +29,7 @@ const listings = [
     category: "canned-food",
     expiry_date: new Date("2022-02-25"),
     listing_image_url:
-      "https://res.cloudinary.com/food-rescue/image/upload/v1660202573/DEV/11864066_XL1_20220509_bpla74.jpg",
+      "https://res.cloudinary.com/food-rescue/image/upload/v1661185258/DEV/81i4Qoc43PS._SL1500__xkjk1j.jpg",
   },
   {
     listing_name: "pringles",
@@ -37,7 +37,7 @@ const listings = [
     category: "snacks",
     expiry_date: new Date("2022-11-01"),
     listing_image_url:
-      "https://res.cloudinary.com/food-rescue/image/upload/v1661103102/DEV/61LsQyKClML_abpuj8.jpg",
+      "https://res.cloudinary.com/food-rescue/image/upload/v1661185289/DEV/61LsQyKClML_vhpire.jpg",
   },
   {
     listing_name: "frozen cream puffs",
@@ -53,7 +53,7 @@ const listings = [
     category: "canned-food",
     expiry_date: new Date("2022-12-25"),
     listing_image_url:
-      "https://res.cloudinary.com/food-rescue/image/upload/v1660202691/DEV/58bd4f6c878c8c13f99e21e5c26c7eee_ygizys.jpg",
+      "https://res.cloudinary.com/food-rescue/image/upload/v1661185359/DEV/11738393_XL1_dtetdr.jpg",
   },
   {
     listing_name: "ketchup",
@@ -61,7 +61,7 @@ const listings = [
     category: "condiments",
     expiry_date: new Date("2022-03-25"),
     listing_image_url:
-      "https://res.cloudinary.com/food-rescue/image/upload/v1660202700/DEV/10789607_XL1_20210203_r9zmad.jpg",
+      "https://res.cloudinary.com/food-rescue/image/upload/v1661185405/DEV/4947ab0f-3c3c-4b80-8262-c8ccd7d7f24e.4917f342ef03d5fa877c1caf18a540e5_zetmhd.jpg",
   },
 ];
 module.exports = listings;

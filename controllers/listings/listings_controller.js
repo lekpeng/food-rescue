@@ -36,6 +36,18 @@ const deleteCloudinaryImage = async (listingImgURL) => {
   });
 };
 
+const getCookie = (req) => {
+  const cookies = req.headers.cookie.split("; ");
+  const cookiesObj = {};
+
+  cookies.forEach((cookie) => {
+    const [key, value] = cookie.split("=");
+    cookiesObj[key] = value;
+  });
+
+  return cookiesObj;
+};
+
 const controller = {
   indexListings: async (req, res) => {
     console.log("------->Indexing listings<--------");
@@ -133,7 +145,7 @@ const controller = {
           return listingA.distance_away - listingB.distance_away;
         });
       }
-
+      res.cookie("redirectURL", "/listings", { encode: String });
       res.render("listings/index", { listings, formInputs });
     } catch (err) {
       console.log("Err displaying listings", err);
@@ -276,8 +288,8 @@ const controller = {
       return;
     }
 
-    res.redirect("/");
-    // }
+    const redirectURL = getCookie(req)["redirectURL"] ?? "/";
+    res.redirect(redirectURL);
   },
 
   deleteListing: async (req, res) => {
@@ -293,10 +305,12 @@ const controller = {
     );
 
     deleteCloudinaryImage(listing.listing_image_url);
+    // TODO: delete listing => delete chats???
 
     // delete listing
     await listingModel.findByIdAndDelete(listingId).exec();
-    res.redirect("/");
+    const redirectURL = getCookie(req)["redirectURL"] ?? "/";
+    res.redirect(redirectURL);
   },
 
   showEditListingForm: async (req, res) => {

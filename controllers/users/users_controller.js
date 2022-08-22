@@ -147,9 +147,7 @@ const controller = {
 
     try {
       const user = await userModel.findOne({ username }).populate("listings").exec();
-      console.log("user", user);
       listings = user.listings;
-      console.log("listings", listings);
       // const allListings = await listingModel.find({}).populate("user").exec();
       // const listings = allListings.filter((listing) => listing.user.username === username);
 
@@ -171,6 +169,7 @@ const controller = {
     if (!listings.length) {
       errorMsg = "This user has no listings";
     }
+    res.cookie("redirectURL", "/users", { encode: String });
 
     res.render("pages/profile", {
       listings,
