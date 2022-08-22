@@ -53,23 +53,23 @@ socket.on("chat", (data) => {
   chatWindow.scrollTop = chatWindow.scrollHeight;
 });
 
-// socket.on("message-history", (usernamesWithMessages) => {
-//   if (usernamesWithMessages.length) {
-//     usernamesWithMessages.forEach((data) => {
-//       output.innerHTML +=
-//         "<div class='d-flex justify-content-between'>" +
-//         "<p id='chat-message'><strong>" +
-//         data.username +
-//         ": </strong>" +
-//         data.message +
-//         "</p>" +
-//         "<p id='chat-date'>" +
-//         new Date(data.timestamp).toLocaleString("en-GB").substring(0, 17) +
-//         "</p>" +
-//         "</div>";
-//     });
-//   }
-// });
+socket.on("message-history", (messages) => {
+  if (messages.length) {
+    messages.forEach((msg) => {
+      output.innerHTML +=
+        "<div class='d-flex justify-content-between'>" +
+        "<p id='chat-message'><strong>" +
+        msg.username +
+        ": </strong>" +
+        msg.message +
+        "</p>" +
+        "<p id='chat-date'>" +
+        new Date(msg.timestamp).toLocaleString("en-GB").substring(0, 17) +
+        "</p>" +
+        "</div>";
+    });
+  }
+});
 
 socket.on("typing", (data) => {
   feedback.innerHTML = "<p><em>" + data + " is typing a message...</em></p>";

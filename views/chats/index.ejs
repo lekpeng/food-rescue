@@ -19,9 +19,10 @@
             <p><%=chat.listing_requester_user.username%></p>
             <%} else {%>
             <p><%=chat.listing_owner_user.username%></p>
+            <%} %>
             <a href="/chats/<%=chat._id%>" class="btn btn-success">View</a>
           </div>
-          <%} })%>
+          <%})%>
         </main>
       </div>
     </div>

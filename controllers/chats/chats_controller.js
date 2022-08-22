@@ -7,33 +7,44 @@ const userModel = require("../../models/users/users");
 const controller = (server) => {
   const socket = require("socket.io");
   const io = socket(server);
-  // const onlineUsers = {};
   io.on("connection", async (socket) => {
     console.log("made socket connection", socket.id);
 
     // Handle online event
-    socket.on("online", (chatId, username) => {
+    socket.on("online", async (chatId, username) => {
       socket.join(chatId);
+
+      // TO DO: EMIT MESSAGE HISTORY
+
+      const chat = await chatModel
+        .findById(chatId)
+        .populate({ path: "messages", populate: "user" })
+        .exec();
+
+      console.log("chat", chat);
+
+      const messages = chat.messages.map((msg) => {
+        return {
+          username: msg.user.username,
+          message: msg.message,
+          timestamp: msg.createdAt,
+        };
+      });
+      socket.emit("message-history", messages);
     });
-
-    // TO DO: EMIT MESSAGE HISTORY
-
-    // const data = await messageModel.find().populate("user").exec();
-    // const usernamesWithMessages = data.map((individualData) => {
-    //   return {
-    //     username: individualData.user.username,
-    //     message: individualData.message,
-    //     timestamp: individualData.createdAt,
-    //   };
-    // });
-    // socket.emit("message-history", usernamesWithMessages);
 
     // Handle chat event
     socket.on("chat", async (chatId, data) => {
       // TODO: SAVING MESSAGE IN DB
-      // const user = await userModel.findOne({ username: data.username }).exec();
-      // await messageModel.create({ user: user._id, message: data.message });
-      // add chat to user perhaps after user sends a message
+      const user = await userModel.findOne({ username: data.username }).exec();
+      const message = await messageModel.create({ user: user._id, message: data.message });
+
+      await chatModel.findOneAndUpdate(
+        { _id: chatId },
+        {
+          $push: { messages: message._id },
+        }
+      );
 
       io.sockets.to(chatId).emit("chat", data);
     });
@@ -86,7 +97,7 @@ const controller = (server) => {
       const currentUser = req.session.currentUser;
       const listingId = req.body.listing_id;
 
-      // TODO: check whether an existing chat exists for this listing
+      // check whether an existing chat exists for this listing
       // if so, just redirect to that chat.
 
       const user = await userModel.findById(currentUser._id).populate("chats");
