@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/header'); %>
+  <body>
+    <%- include('../partials/nav'); %>
+
+    <div class="constrained-full-height" id="page-index-chats">
+      <div class="container">
+        <div class="pt-4 text-end">
+          <h1 class="text-center">All Chats</h1>
+        </div>
+
+        <main class="chats">
+          <!-- filter and display chats here -->
+          <%chats.forEach(chat => {%>
+          <div class="chat mt-3 mb-3">
+            <h3><%=chat.listing.listing_name%></h3>
+            <%if (username === chat.listing_owner_user.username){%>
+            <p><%=chat.listing_requester_user.username%></p>
+            <%} else {%>
+            <p><%=chat.listing_owner_user.username%></p>
+            <%} %>
+            <a href="/chats/<%=chat._id%>" class="btn btn-success">View</a>
+          </div>
+          <%})%>
+        </main>
+      </div>
+    </div>
+    <%- include('../partials/footer'); %>
+  </body>
+</html>

@@ -37,7 +37,7 @@ const listings = [
     category: "snacks",
     expiry_date: new Date("2022-11-01"),
     listing_image_url:
-      "https://res.cloudinary.com/food-rescue/image/upload/v1660202595/DEV/12387644_XL1_20220228_yrfyu3.jpg",
+      "https://res.cloudinary.com/food-rescue/image/upload/v1661103102/DEV/61LsQyKClML_abpuj8.jpg",
   },
   {
     listing_name: "frozen cream puffs",

@@ -9,12 +9,12 @@ const userSchema = new mongoose.Schema({
     },
   ],
 
-  // chats: [
-  //   {
-  //     type: Schema.Types.ObjectId,
-  //     ref: "Chat",
-  //   },
-  // ],
+  chats: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Chat",
+    },
+  ],
 
   username: {
     type: String,

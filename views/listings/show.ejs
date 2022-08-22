@@ -40,7 +40,11 @@
               </div>
 
               <%} else {%>
-              <a href="" class="btn btn-success">Chat</a>
+                <form method="POST" action="/chats">
+                  <input type="hidden" name="listing_id" value="<%=listing._id%>">
+                  <input type="hidden" name="listing_owner_user_id" value="<%=listing.user._id%>">
+                  <button type="submit" class="btn btn-success">Chat</a>
+                </form>
               <%}%> <%}%>
             </div>
           </div>
