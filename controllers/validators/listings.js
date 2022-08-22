@@ -8,6 +8,7 @@ const validators = {
     category: Joi.string().required().label("Category"),
     expiry_date: Joi.date().required().label("Expiry Date"),
   }),
+
   editListingValidator: Joi.object({
     status: Joi.string().required().label("Status"),
     listing_name: Joi.string().min(6).max(30).required().label("Listing name"),
