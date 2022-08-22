@@ -106,9 +106,14 @@ app.get("/listings/new", authMiddleware.isAuthenticated, listingController.showN
 // 3) Show
 app.get("/listings/:listingId", authMiddleware.isAuthenticated, listingController.showListing);
 // 4) Create
-app.post("/listings", upload.single("listing_image"), listingController.createListing);
+app.post(
+  "/listings",
+  authMiddleware.isAuthenticated,
+  upload.single("listing_image"),
+  listingController.createListing
+);
 // 5) Destroy
-app.delete("/listings/:listingId", listingController.deleteListing);
+app.delete("/listings/:listingId", authMiddleware.isAuthenticated, listingController.deleteListing);
 // 6) Edit
 app.get(
   "/listings/:listingId/edit",
@@ -116,7 +121,12 @@ app.get(
   listingController.showEditListingForm
 );
 // 7) Update
-app.put("/listings/:listingId", upload.single("listing_image"), listingController.updateListing);
+app.put(
+  "/listings/:listingId",
+  authMiddleware.isAuthenticated,
+  upload.single("listing_image"),
+  listingController.updateListing
+);
 
 // Chat
 // 1) Index

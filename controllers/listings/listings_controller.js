@@ -179,7 +179,7 @@ const controller = {
       errorMsg: "",
       listing,
       currentUserIsPoster: currentUser.username === posterUser.username,
-      referer: req.headers.referer,
+      // referer: req.headers.referer,
       apiKey: process.env.ESRI_API_KEY,
     });
   },
@@ -191,7 +191,11 @@ const controller = {
     const month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
     const day = ("0" + dateObj.getDate()).slice(-2);
     const todayDate = `${year}-${month}-${day}`;
-    res.render("listings/new", { todayDate, errorMsg: null, referer: req.headers.referer });
+    res.render("listings/new", {
+      todayDate,
+      errorMsg: null,
+      // referer: req.headers.referer
+    });
   },
 
   createListing: async (req, res) => {
@@ -207,12 +211,16 @@ const controller = {
     let errorMsg = false;
 
     const stuffToValidate = { ...req.body };
-    delete stuffToValidate["referer"];
+    // delete stuffToValidate["referer"];
     const validationResults = listingValidators.createListingValidator.validate(stuffToValidate);
 
     if (validationResults.error) {
       errorMsg = validationResults.error.details[0].message;
-      res.render("listings/new", { errorMsg, todayDate, referer: req.headers.referer });
+      res.render("listings/new", {
+        errorMsg,
+        todayDate,
+        // referer: req.headers.referer
+      });
       return;
     }
 
@@ -221,7 +229,11 @@ const controller = {
     // validation for req.file -> upload in wrong format
     if (req.fileValidationError) {
       errorMsg = req.fileValidationError;
-      res.render("listings/new", { errorMsg, todayDate, referer: req.headers.referer });
+      res.render("listings/new", {
+        errorMsg,
+        todayDate,
+        // referer: req.headers.referer
+      });
       return;
     }
 
@@ -248,22 +260,26 @@ const controller = {
         }
       );
     } catch (err) {
-      errorMsg = "Something went wrong. Please try creating the listing again.";
-      res.render("listings/new", { errorMsg, todayDate, referer: req.headers.referer });
+      errorMsg = err;
+      res.render("listings/new", {
+        errorMsg,
+        todayDate,
+        // referer: req.headers.referer
+      });
       return;
     }
 
     // redirect user to previous page before show
-    if (req.body.referer) {
-      const link = new URL(req.body.referer);
-      if (link.pathname === "/listings/new") {
-        res.redirect("/listings");
-      } else {
-        res.redirect(req.body.referer);
-      }
-    } else {
-      res.redirect("/");
-    }
+    // if (req.body.referer) {
+    //   const link = new URL(req.body.referer);
+    //   if (link.pathname === "/listings/new") {
+    //     res.redirect("/listings");
+    //   } else {
+    //     res.redirect(req.body.referer);
+    //   }
+    // } else {
+    res.redirect("/");
+    // }
   },
 
   deleteListing: async (req, res) => {
@@ -290,11 +306,11 @@ const controller = {
     await listingModel.findByIdAndDelete(listingId).exec();
 
     // redirect user to previous page before show
-    if (req.body.referer) {
-      res.redirect(req.body.referer);
-    } else {
-      res.redirect("/");
-    }
+    // if (req.body.referer) {
+    //   res.redirect(req.body.referer);
+    // } else {
+    res.redirect("/");
+    // }
   },
 
   showEditListingForm: async (req, res) => {
@@ -380,6 +396,15 @@ const controller = {
         expiry_date: validatedResults.expiry_date,
         listing_image_url: req.file.path,
       };
+      // remove old img from cloudinary
+      const oldListing = await listingModel.findById(listingId).exec();
+      // regex splt by dot and slash
+      const cloudinaryURL = oldListing.listing_image_url.split(/[./]+/);
+      const cloudinarylistingImgId = `DEV/${cloudinaryURL[cloudinaryURL.indexOf("DEV") + 1]}`;
+
+      await cloudinary.uploader.destroy(cloudinarylistingImgId, (err, res) => {
+        console.log(res, err);
+      });
     } else {
       updateListing = {
         status: validatedResults.status,
@@ -390,16 +415,6 @@ const controller = {
         expiry_date: validatedResults.expiry_date,
       };
     }
-
-    const oldListing = await listingModel.findById(listingId).exec();
-    // regex splt by dot and slash
-    const cloudinaryURL = oldListing.listing_image_url.split(/[./]+/);
-    const cloudinarylistingImgId = `DEV/${cloudinaryURL[cloudinaryURL.indexOf("DEV") + 1]}`;
-
-    // remove old img from cloudinary
-    await cloudinary.uploader.destroy(cloudinarylistingImgId, (err, res) => {
-      console.log(res, err);
-    });
 
     await listingModel.findOneAndUpdate({ _id: listingId }, updateListing);
     res.redirect(`/listings/${listingId}`);
